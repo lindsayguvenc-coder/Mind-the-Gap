@@ -38,6 +38,19 @@ const countryCodeMap: Record<string, string> = {
   'norway': 'NOR'
 };
 
+// Valid stat types for whitelist validation
+const validStats = ['paygap', 'leadership', 'maternal', 'healthcare', 'workforce'] as const;
+
+// Helper function to escape SVG text content to prevent injection
+function escapeSvgText(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
 const locationNames: Record<string, string> = {
   'WLD': 'global',
   'USA': 'US',
@@ -499,7 +512,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/badge/:stat/:country", async (req, res) => {
     try {
       const { stat, country } = req.params;
+      
+      // Validate stat parameter (whitelist check)
+      if (!validStats.includes(stat as any)) {
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        return res.status(400).send('Invalid stat type');
+      }
+      
       const location = country || 'global';
+      
+      // Validate country parameter (whitelist check)
+      if (!(location in countryCodeMap)) {
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        return res.status(400).send('Invalid country');
+      }
+      
       const cacheKey = `stats_${location}`;
       
       // Check cache
@@ -508,7 +535,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
         stats = cached.data;
       } else {
-        const countryCode = countryCodeMap[location] || 'WLD';
+        const countryCode = countryCodeMap[location];
         
         // Fetch all stats in parallel
         const [payGap, leadership, maternal, healthcare, workforce] = await Promise.all([
@@ -537,11 +564,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const data = stats[stat as keyof typeof stats];
       if (!data || typeof data === 'string') {
+        res.setHeader('Cache-Control', 'public, max-age=86400');
         return res.status(404).send('Stat not found');
       }
 
-      const statValue = data.value;
-      const statDetail = data.detail;
+      // Sanitize values to prevent SVG injection
+      const statValue = escapeSvgText(data.value);
+      const statDetail = escapeSvgText(data.detail);
 
       // Generate SVG badge
       const svg = `
@@ -564,6 +593,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.send(svg.trim());
     } catch (error) {
       console.error('Error generating badge:', error);
+      res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache errors for 1 hour
       res.status(500).send('Failed to generate badge');
     }
   });
@@ -571,7 +601,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/badge-png/:stat/:country", async (req, res) => {
     try {
       const { stat, country } = req.params;
+      
+      // Validate stat parameter (whitelist check)
+      if (!validStats.includes(stat as any)) {
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        return res.status(400).send('Invalid stat type');
+      }
+      
       const location = country || 'global';
+      
+      // Validate country parameter (whitelist check)
+      if (!(location in countryCodeMap)) {
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        return res.status(400).send('Invalid country');
+      }
+      
       const cacheKey = `stats_${location}`;
       
       // Check cache
@@ -580,7 +624,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
         stats = cached.data;
       } else {
-        const countryCode = countryCodeMap[location] || 'WLD';
+        const countryCode = countryCodeMap[location];
         
         // Fetch all stats in parallel
         const [payGap, leadership, maternal, healthcare, workforce] = await Promise.all([
@@ -609,11 +653,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const data = stats[stat as keyof typeof stats];
       if (!data || typeof data === 'string') {
+        res.setHeader('Cache-Control', 'public, max-age=86400');
         return res.status(404).send('Stat not found');
       }
 
-      const statValue = data.value;
-      const statDetail = data.detail;
+      // Sanitize values to prevent SVG injection
+      const statValue = escapeSvgText(data.value);
+      const statDetail = escapeSvgText(data.detail);
 
       // Generate SVG badge (same as SVG endpoint)
       const svg = `
@@ -641,6 +687,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.send(pngBuffer);
     } catch (error) {
       console.error('Error generating PNG badge:', error);
+      res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache errors for 1 hour
       res.status(500).send('Failed to generate PNG badge');
     }
   });
