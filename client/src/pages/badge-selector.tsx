@@ -57,6 +57,7 @@ const countryLabels: Record<CountryCode, string> = {
 export default function BadgeSelector() {
   const [selectedStat, setSelectedStat] = useState<StatType>('paygap');
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>('global');
+  const [badgeFormat, setBadgeFormat] = useState<'png' | 'svg'>('png');
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
@@ -76,7 +77,8 @@ export default function BadgeSelector() {
   const Icon = currentStatConfig.icon;
 
   const generateEmbedCode = () => {
-    const badgeUrl = `${window.location.origin}/api/badge/${selectedStat}/${selectedCountry}`;
+    const endpoint = badgeFormat === 'png' ? 'badge-png' : 'badge';
+    const badgeUrl = `${window.location.origin}/api/${endpoint}/${selectedStat}/${selectedCountry}`;
     const dashboardUrl = `${window.location.origin}/dashboard`;
     return `<a href="${dashboardUrl}" style="text-decoration:none;"><img src="${badgeUrl}" alt="Mind the Gap - ${currentStatConfig.title}" /></a>`;
   };
@@ -234,6 +236,45 @@ export default function BadgeSelector() {
             <div className="p-6 bg-primary/10 rounded-lg border border-primary/20">
               <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <Badge className="w-8 h-8 flex items-center justify-center font-bold p-0">4</Badge>
+                Choose Format
+              </h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                PNG works in email signatures (Gmail, Outlook, etc.). SVG is better for websites and blogs.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                onClick={() => setBadgeFormat('png')}
+                className={`p-6 rounded-lg border-2 transition-all text-left hover-elevate ${
+                  badgeFormat === 'png'
+                    ? 'border-primary bg-accent'
+                    : 'border-border'
+                }`}
+                data-testid="button-select-format-png"
+              >
+                <div className="font-bold text-lg mb-2">PNG</div>
+                <div className="text-sm text-muted-foreground">For Email Signatures</div>
+                <div className="text-xs text-muted-foreground mt-1">Gmail, Outlook, Apple Mail</div>
+              </button>
+              <button
+                onClick={() => setBadgeFormat('svg')}
+                className={`p-6 rounded-lg border-2 transition-all text-left hover-elevate ${
+                  badgeFormat === 'svg'
+                    ? 'border-primary bg-accent'
+                    : 'border-border'
+                }`}
+                data-testid="button-select-format-svg"
+              >
+                <div className="font-bold text-lg mb-2">SVG</div>
+                <div className="text-sm text-muted-foreground">For Websites & Blogs</div>
+                <div className="text-xs text-muted-foreground mt-1">WordPress, GitHub, etc.</div>
+              </button>
+            </div>
+
+            <div className="p-6 bg-primary/10 rounded-lg border border-primary/20">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <Badge className="w-8 h-8 flex items-center justify-center font-bold p-0">5</Badge>
                 Copy the Code
               </h3>
               <p className="text-sm text-muted-foreground mb-4">
