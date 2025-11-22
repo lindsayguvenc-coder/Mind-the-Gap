@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import sharp from "sharp";
 
 interface WorldBankResponse {
   value: string;
@@ -564,6 +565,83 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error generating badge:', error);
       res.status(500).send('Failed to generate badge');
+    }
+  });
+
+  app.get("/api/badge-png/:stat/:country", async (req, res) => {
+    try {
+      const { stat, country } = req.params;
+      const location = country || 'global';
+      const cacheKey = `stats_${location}`;
+      
+      // Check cache
+      let stats;
+      const cached = cache[cacheKey];
+      if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+        stats = cached.data;
+      } else {
+        const countryCode = countryCodeMap[location] || 'WLD';
+        
+        // Fetch all stats in parallel
+        const [payGap, leadership, maternal, healthcare, workforce] = await Promise.all([
+          getPayGap(countryCode),
+          getLeadership(countryCode),
+          getMaternalMortality(countryCode),
+          getContraceptiveAccess(countryCode),
+          getWorkforceParticipation(countryCode)
+        ]);
+        
+        stats = {
+          paygap: payGap,
+          leadership,
+          maternal,
+          healthcare,
+          workforce,
+          lastUpdated: new Date().toISOString()
+        };
+
+        // Update cache
+        cache[cacheKey] = {
+          data: stats,
+          timestamp: Date.now()
+        };
+      }
+
+      const data = stats[stat as keyof typeof stats];
+      if (!data || typeof data === 'string') {
+        return res.status(404).send('Stat not found');
+      }
+
+      const statValue = data.value;
+      const statDetail = data.detail;
+
+      // Generate SVG badge (same as SVG endpoint)
+      const svg = `
+        <svg width="500" height="80" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:hsl(222 47% 27%);stop-opacity:1" />
+              <stop offset="100%" style="stop-color:hsl(222 47% 22%);stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <rect width="500" height="80" fill="url(#grad)" rx="6"/>
+          <text x="20" y="30" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
+          <text x="20" y="55" font-family="Inter, sans-serif" font-size="16" font-weight="700" fill="white">${statDetail}</text>
+          <text x="450" y="55" font-family="JetBrains Mono, monospace" font-size="32" font-weight="700" fill="white" text-anchor="end">${statValue}</text>
+        </svg>
+      `;
+
+      // Convert SVG to PNG using sharp
+      const pngBuffer = await sharp(Buffer.from(svg.trim()))
+        .png()
+        .toBuffer();
+
+      res.setHeader('Content-Type', 'image/png');
+      res.setHeader('Cache-Control', 'public, max-age=86400'); // Cache for 24 hours
+      res.send(pngBuffer);
+    } catch (error) {
+      console.error('Error generating PNG badge:', error);
+      res.status(500).send('Failed to generate PNG badge');
     }
   });
 
