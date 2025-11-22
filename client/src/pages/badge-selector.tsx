@@ -42,6 +42,16 @@ const countryLabels: Record<CountryCode, string> = {
   us: 'US',
   uk: 'UK',
   canada: 'Canada',
+  france: 'France',
+  germany: 'Germany',
+  japan: 'Japan',
+  australia: 'Australia',
+  india: 'India',
+  brazil: 'Brazil',
+  mexico: 'Mexico',
+  'south-africa': 'South Africa',
+  sweden: 'Sweden',
+  norway: 'Norway',
 };
 
 export default function BadgeSelector() {

@@ -19,5 +19,5 @@ export const allStatsSchema = z.object({
 export type Statistic = z.infer<typeof statisticSchema>;
 export type AllStats = z.infer<typeof allStatsSchema>;
 
-export type CountryCode = 'global' | 'us' | 'uk' | 'canada';
+export type CountryCode = 'global' | 'us' | 'uk' | 'canada' | 'france' | 'germany' | 'japan' | 'australia' | 'india' | 'brazil' | 'mexico' | 'south-africa' | 'sweden' | 'norway';
 export type StatType = 'paygap' | 'leadership' | 'maternal' | 'healthcare' | 'workforce';

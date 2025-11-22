@@ -2,7 +2,13 @@
 
 ## Overview
 
-Mind the Gap is a data visualization dashboard application that displays real-time gender equality statistics from the World Bank API. The application presents five key metrics: gender pay gap, leadership representation, maternal mortality rate, contraceptive access, and workforce participation across multiple countries (Global, US, UK, Canada). Users can view statistics either as a comprehensive dashboard or generate embeddable badges for individual metrics.
+Mind the Gap is a comprehensive data visualization dashboard application that displays real-time gender equality statistics from the World Bank API. The application presents five key metrics: gender pay gap, leadership representation, maternal mortality rate, contraceptive access, and workforce participation across 14 countries (Global, US, UK, Canada, France, Germany, Japan, Australia, India, Brazil, Mexico, South Africa, Sweden, Norway). 
+
+Users can:
+- View all statistics in an interactive dashboard with expandable historical trend charts (2015-2024)
+- Generate embeddable badges for individual metrics
+- Export statistics in CSV or JSON formats for research/analysis
+- Share individual statistics on social media (Twitter, LinkedIn, Facebook) with pre-generated stat cards
 
 ## User Preferences
 
@@ -43,8 +49,11 @@ Preferred communication style: Simple, everyday language.
 
 **API Design Pattern: RESTful**
 - **Endpoints Structure**:
-  - `/api/stats/:location` - Fetch all statistics for a specific location
-  - `/api/stats/:location/:statType` - Fetch specific statistic for a location
+  - `/api/stats/:country` - Fetch all statistics for a specific country
+  - `/api/trends/:stat/:country` - Fetch historical time-series data (2015-2024) for a specific statistic and country
+  - `/api/export/:country?format=csv|json` - Export all statistics in CSV or JSON format with proper download headers
+  - `/api/badge/:stat/:country` - Generate embeddable SVG badge (500x80) for a specific statistic
+  - `/api/share/:stat/:country` - Generate social media share card (1200x630 SVG) optimized for Twitter/LinkedIn/Facebook
 - **Response Format**: JSON with structured statistics schema (value, detail, year, source)
 
 **Data Caching Strategy**
@@ -84,10 +93,17 @@ Preferred communication style: Simple, everyday language.
 - **Loading Strategy**: Preconnect to Google Fonts domains for performance
 
 **UI Component Libraries**
-- **Radix UI**: Complete suite of accessible, unstyled components
-- **Lucide React**: Icon library for data visualization icons (TrendingDown, Users, Heart, etc.)
+- **Radix UI**: Complete suite of accessible, unstyled components (Dialog, Dropdown, Select, etc.)
+- **Lucide React**: Icon library for data visualization icons (TrendingDown, Users, Heart, Share2, Download, etc.)
+- **Recharts**: Data visualization library for historical trend charts (LineChart with responsive containers)
 - **class-variance-authority**: Type-safe variant management for components
 - **cmdk**: Command palette component
+
+**Data Visualization**
+- **Library**: Recharts v2.15.2
+- **Chart Types**: Line charts for historical trends
+- **Features**: Responsive containers, tooltips, grid overlays, themed styling matching application design
+- **Integration**: Charts load on-demand when user expands stat cards to minimize initial data fetching
 
 ### Build and Deployment Architecture
 
@@ -112,3 +128,36 @@ Preferred communication style: Simple, everyday language.
 - **User Storage**: In-memory storage with interface for future database integration
 - **Session Management**: PostgreSQL-backed sessions configured but not actively used
 - **Future Extension Point**: Authentication system designed for easy integration
+
+## Recent Updates (November 2025)
+
+### Expanded Country Coverage
+- **Countries Added**: France, Germany, Japan, Australia, India, Brazil, Mexico, South Africa, Sweden, Norway
+- **Total Coverage**: 14 countries (from 4 to 14)
+- **Implementation**: Updated TypeScript types, backend country code mappings, and frontend selectors
+- **Data Source**: All countries fetch real-time data from World Bank API with country-specific fallbacks
+
+### Historical Trend Analysis
+- **Feature**: Interactive expandable trend charts on each statistic card
+- **Data Range**: 2015-2024 (10 years of historical data)
+- **Visualization**: Recharts LineChart with responsive design
+- **Caching**: Trend data cached per stat/country combination for 24 hours
+- **User Experience**: Click chevron button on any stat card to reveal/hide historical trends
+- **Data Quality**: Filters null values, sorts chronologically, handles missing years gracefully
+
+### Data Export Functionality
+- **Formats**: CSV and JSON
+- **Implementation**: `/api/export/:country` endpoint with query parameter `?format=csv|json`
+- **CSV Structure**: Headers include Metric, Value, Detail, Year, Source
+- **Download Behavior**: Proper Content-Disposition headers trigger browser downloads
+- **File Naming**: `mind-the-gap-{country}-{date}.{format}`
+- **UI Integration**: Dropdown button in dashboard header with format selection
+
+### Social Media Sharing
+- **Feature**: Share individual statistics on social media platforms
+- **Implementation**: SVG-based share cards (1200x630) optimized for social media
+- **Technical Decision**: SVG chosen over PNG for infinite scalability, smaller file sizes, and broad web support
+- **Platforms**: Twitter, LinkedIn, Facebook with platform-specific sharing URLs
+- **Share Card Design**: Gradient background, large typography, branding, source attribution
+- **Copy Feature**: Direct link copying for manual sharing or embedding
+- **UI Integration**: Share button on each stat card opens dialog with preview and platform buttons

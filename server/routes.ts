@@ -24,14 +24,34 @@ const countryCodeMap: Record<string, string> = {
   'global': 'WLD',
   'us': 'USA',
   'uk': 'GBR',
-  'canada': 'CAN'
+  'canada': 'CAN',
+  'france': 'FRA',
+  'germany': 'DEU',
+  'japan': 'JPN',
+  'australia': 'AUS',
+  'india': 'IND',
+  'brazil': 'BRA',
+  'mexico': 'MEX',
+  'south-africa': 'ZAF',
+  'sweden': 'SWE',
+  'norway': 'NOR'
 };
 
 const locationNames: Record<string, string> = {
   'WLD': 'global',
   'USA': 'US',
   'GBR': 'UK',
-  'CAN': 'Canada'
+  'CAN': 'Canada',
+  'FRA': 'France',
+  'DEU': 'Germany',
+  'JPN': 'Japan',
+  'AUS': 'Australia',
+  'IND': 'India',
+  'BRA': 'Brazil',
+  'MEX': 'Mexico',
+  'ZAF': 'South Africa',
+  'SWE': 'Sweden',
+  'NOR': 'Norway'
 };
 
 function getLocationName(code: string): string {
@@ -239,6 +259,239 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error fetching stats:', error);
       res.status(500).json({ error: 'Failed to fetch statistics' });
+    }
+  });
+
+  app.get("/api/trends/:stat/:country", async (req, res) => {
+    try {
+      const { stat, country } = req.params;
+      const location = country || 'global';
+      const cacheKey = `trends_${stat}_${location}`;
+      
+      // Check cache
+      const cached = cache[cacheKey];
+      if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+        return res.json(cached.data);
+      }
+
+      const countryCode = countryCodeMap[location] || 'WLD';
+      
+      // Map stat types to World Bank indicators
+      const indicatorMap: Record<string, string> = {
+        'paygap': 'SL.EMP.WORK.FE.WE.ZS', // Using female employment as proxy
+        'leadership': 'SG.GEN.PARL.ZS',
+        'maternal': 'SH.STA.MMRT',
+        'healthcare': 'SP.DYN.CONM.ZS',
+        'workforce': 'SL.TLF.TOTL.FE.ZS'
+      };
+
+      const indicator = indicatorMap[stat];
+      if (!indicator) {
+        return res.status(400).json({ error: 'Invalid stat type' });
+      }
+
+      // Fetch historical data (2015-2024)
+      const url = `${worldBankBase}/country/${countryCode}/indicator/${indicator}?format=json&date=2015:2024&per_page=100`;
+      
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      const trendData = [];
+      if (data[1] && Array.isArray(data[1])) {
+        for (const item of data[1]) {
+          if (item.value !== null) {
+            trendData.push({
+              year: item.date,
+              value: Math.round(item.value * 100) / 100,
+              countryName: item.country.value
+            });
+          }
+        }
+      }
+
+      // Sort by year ascending
+      trendData.sort((a, b) => parseInt(a.year) - parseInt(b.year));
+
+      const result = {
+        stat,
+        country: location,
+        data: trendData,
+        indicator,
+        lastUpdated: new Date().toISOString()
+      };
+
+      // Update cache
+      cache[cacheKey] = {
+        data: result,
+        timestamp: Date.now()
+      };
+
+      res.json(result);
+    } catch (error) {
+      console.error('Error fetching trend data:', error);
+      res.status(500).json({ error: 'Failed to fetch trend data' });
+    }
+  });
+
+  app.get("/api/export/:country", async (req, res) => {
+    try {
+      const country = req.params.country || 'global';
+      const format = (req.query.format as string) || 'json';
+      const cacheKey = `stats_${country}`;
+      
+      // Check cache
+      let stats;
+      const cached = cache[cacheKey];
+      if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+        stats = cached.data;
+      } else {
+        const countryCode = countryCodeMap[country] || 'WLD';
+        
+        // Fetch all stats in parallel
+        const [payGap, leadership, maternal, healthcare, workforce] = await Promise.all([
+          getPayGap(countryCode),
+          getLeadership(countryCode),
+          getMaternalMortality(countryCode),
+          getContraceptiveAccess(countryCode),
+          getWorkforceParticipation(countryCode)
+        ]);
+        
+        stats = {
+          paygap: payGap,
+          leadership,
+          maternal,
+          healthcare,
+          workforce,
+          lastUpdated: new Date().toISOString()
+        };
+
+        // Update cache
+        cache[cacheKey] = {
+          data: stats,
+          timestamp: Date.now()
+        };
+      }
+
+      if (format === 'csv') {
+        // Generate CSV
+        const csv = [
+          'Metric,Value,Detail,Year,Source',
+          `Gender Pay Gap,${stats.paygap.value},"${stats.paygap.detail}",${stats.paygap.year || ''},${stats.paygap.source || ''}`,
+          `Leadership Representation,${stats.leadership.value},"${stats.leadership.detail}",${stats.leadership.year || ''},${stats.leadership.source || ''}`,
+          `Maternal Mortality,${stats.maternal.value},"${stats.maternal.detail}",${stats.maternal.year || ''},${stats.maternal.source || ''}`,
+          `Contraceptive Access,${stats.healthcare.value},"${stats.healthcare.detail}",${stats.healthcare.year || ''},${stats.healthcare.source || ''}`,
+          `Workforce Participation,${stats.workforce.value},"${stats.workforce.detail}",${stats.workforce.year || ''},${stats.workforce.source || ''}`
+        ].join('\n');
+
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename="mind-the-gap-${country}-${new Date().toISOString().split('T')[0]}.csv"`);
+        res.send(csv);
+      } else {
+        // JSON format
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Disposition', `attachment; filename="mind-the-gap-${country}-${new Date().toISOString().split('T')[0]}.json"`);
+        res.json(stats);
+      }
+    } catch (error) {
+      console.error('Error exporting data:', error);
+      res.status(500).json({ error: 'Failed to export data' });
+    }
+  });
+
+  app.get("/api/share/:stat/:country", async (req, res) => {
+    try {
+      const { stat, country } = req.params;
+      const location = country || 'global';
+      const cacheKey = `stats_${location}`;
+      
+      // Check cache
+      let stats;
+      const cached = cache[cacheKey];
+      if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+        stats = cached.data;
+      } else {
+        const countryCode = countryCodeMap[location] || 'WLD';
+        
+        // Fetch all stats in parallel
+        const [payGap, leadership, maternal, healthcare, workforce] = await Promise.all([
+          getPayGap(countryCode),
+          getLeadership(countryCode),
+          getMaternalMortality(countryCode),
+          getContraceptiveAccess(countryCode),
+          getWorkforceParticipation(countryCode)
+        ]);
+        
+        stats = {
+          paygap: payGap,
+          leadership,
+          maternal,
+          healthcare,
+          workforce,
+          lastUpdated: new Date().toISOString()
+        };
+
+        // Update cache
+        cache[cacheKey] = {
+          data: stats,
+          timestamp: Date.now()
+        };
+      }
+
+      const data = stats[stat as keyof typeof stats];
+      if (!data || typeof data === 'string') {
+        return res.status(404).send('Stat not found');
+      }
+
+      const statValue = data.value;
+      const statDetail = data.detail;
+      
+      const statTitles: Record<string, string> = {
+        'paygap': 'Gender Pay Gap',
+        'leadership': 'Leadership Representation',
+        'maternal': 'Maternal Mortality Rate',
+        'healthcare': 'Contraceptive Access',
+        'workforce': 'Workforce Participation'
+      };
+
+      const statTitle = statTitles[stat] || 'Statistic';
+      const locationName = getLocationName(countryCodeMap[location] || 'WLD');
+
+      // Generate shareable SVG card (larger than badge for social media)
+      const svg = `
+        <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:hsl(222 47% 27%);stop-opacity:1" />
+              <stop offset="100%" style="stop-color:hsl(222 47% 15%);stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="630" fill="url(#grad)"/>
+          
+          <!-- Top branding -->
+          <text x="60" y="80" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
+          <text x="60" y="115" font-family="Inter, sans-serif" font-size="18" font-weight="400" fill="rgba(255,255,255,0.7)">Women's Rights &amp; Equality Statistics</text>
+          
+          <!-- Main content -->
+          <text x="60" y="220" font-family="Inter, sans-serif" font-size="32" font-weight="600" fill="rgba(255,255,255,0.9)">${statTitle}</text>
+          <text x="60" y="260" font-family="Inter, sans-serif" font-size="24" font-weight="400" fill="rgba(255,255,255,0.75)">${locationName}</text>
+          
+          <!-- Large value -->
+          <text x="60" y="400" font-family="JetBrains Mono, monospace" font-size="120" font-weight="700" fill="white">${statValue}</text>
+          
+          <!-- Detail -->
+          <text x="60" y="480" font-family="Inter, sans-serif" font-size="22" font-weight="400" fill="rgba(255,255,255,0.8)">${statDetail.substring(0, 80)}</text>
+          
+          <!-- Footer -->
+          <text x="60" y="570" font-family="Inter, sans-serif" font-size="16" font-weight="400" fill="rgba(255,255,255,0.6)">Source: ${data.source || 'World Bank'}</text>
+        </svg>
+      `;
+
+      res.setHeader('Content-Type', 'image/svg+xml');
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+      res.send(svg.trim());
+    } catch (error) {
+      console.error('Error generating share card:', error);
+      res.status(500).send('Failed to generate share card');
     }
   });
 
