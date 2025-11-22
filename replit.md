@@ -52,9 +52,11 @@ Preferred communication style: Simple, everyday language.
   - `/api/stats/:country` - Fetch all statistics for a specific country
   - `/api/trends/:stat/:country` - Fetch historical time-series data (2015-2024) for a specific statistic and country
   - `/api/export/:country?format=csv|json` - Export all statistics in CSV or JSON format with proper download headers
-  - `/api/badge/:stat/:country` - Generate embeddable SVG badge (500x80) for a specific statistic
+  - `/api/badge/:stat/:country` - Generate embeddable SVG badge (500x80) for a specific statistic (web use)
+  - `/api/badge-png/:stat/:country` - Generate PNG badge (500x80) from SVG for email signature compatibility
   - `/api/share/:stat/:country` - Generate social media share card (1200x630 SVG) optimized for Twitter/LinkedIn/Facebook
 - **Response Format**: JSON with structured statistics schema (value, detail, year, source)
+- **Security**: All badge endpoints include whitelist validation for stat/country params and SVG text sanitization to prevent injection attacks
 
 **Data Caching Strategy**
 - **Problem**: World Bank API rate limits and slow response times
@@ -161,3 +163,16 @@ Preferred communication style: Simple, everyday language.
 - **Share Card Design**: Gradient background, large typography, branding, source attribution
 - **Copy Feature**: Direct link copying for manual sharing or embedding
 - **UI Integration**: Share button on each stat card opens dialog with preview and platform buttons
+
+### Email Signature Badge Support
+- **Problem Solved**: Gmail and most email clients don't support SVG images in signatures
+- **Solution**: Dual-format badge generation with format-specific use cases
+- **PNG Badge Endpoint**: `/api/badge-png/:stat/:country` converts SVG badges to PNG using Sharp library
+- **Image Format**: 500x80 PNG optimized for email client compatibility
+- **UI Enhancement**: Badge selector offers PNG/SVG toggle with clear labeling (PNG for email, SVG for websites)
+- **Default Selection**: PNG format selected by default for optimal email client support
+- **Security**: Comprehensive input validation, whitelist checking, and SVG text sanitization to prevent injection attacks
+- **Performance**: Server-side Sharp conversion ensures consistent rendering across all email clients
+- **Use Cases**: 
+  - PNG: Gmail signatures, Outlook signatures, email marketing campaigns
+  - SVG: Website embedding, web documentation, modern web platforms
