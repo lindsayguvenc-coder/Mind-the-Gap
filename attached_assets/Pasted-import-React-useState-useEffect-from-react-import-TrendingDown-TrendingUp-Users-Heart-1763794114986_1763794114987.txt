@@ -1,0 +1,609 @@
+import React, { useState, useEffect } from 'react';
+import { TrendingDown, TrendingUp, Users, Heart, Briefcase, AlertCircle, Copy, Check, RefreshCw } from 'lucide-react';
+
+// ===== API SERVICE WITH CACHING =====
+class GenderStatsAPI {
+  constructor() {
+    this.worldBankBase = 'https://api.worldbank.org/v2';
+    this.cacheKey = 'mindthegap_stats_cache';
+    this.cacheExpiry = 24 * 60 * 60 * 1000; // 24 hours
+  }
+
+  // Check if cached data is still valid
+  isCacheValid(cachedData) {
+    if (!cachedData || !cachedData.timestamp) return false;
+    const now = Date.now();
+    return (now - cachedData.timestamp) < this.cacheExpiry;
+  }
+
+  // Get cached data
+  getFromCache(location) {
+    try {
+      const cached = localStorage.getItem(`${this.cacheKey}_${location}`);
+      if (!cached) return null;
+      
+      const data = JSON.parse(cached);
+      return this.isCacheValid(data) ? data.stats : null;
+    } catch (error) {
+      console.error('Cache read error:', error);
+      return null;
+    }
+  }
+
+  // Save to cache
+  saveToCache(location, stats) {
+    try {
+      const cacheData = {
+        stats,
+        timestamp: Date.now()
+      };
+      localStorage.setItem(`${this.cacheKey}_${location}`, JSON.stringify(cacheData));
+    } catch (error) {
+      console.error('Cache write error:', error);
+    }
+  }
+
+  async getPayGap(countryCode = 'WLD') {
+    const url = `${this.worldBankBase}/country/${countryCode}/indicator/SL.EMP.WORK.FE.WE.ZS?format=json&date=2020:2024&per_page=1&mrv=1`;
+    
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data[1] && data[1].length > 0) {
+        const ratio = data[1][0].value;
+        const gap = 100 - ratio;
+        const locationName = this.getLocationName(countryCode);
+        return {
+          value: `${Math.round(gap)}%`,
+          detail: `Gender pay gap: ${Math.round(gap)}% (${locationName})`,
+          year: data[1][0].date,
+          source: 'World Bank / ILO'
+        };
+      }
+      
+      return this.getFallbackPayGap(countryCode);
+    } catch (error) {
+      return this.getFallbackPayGap(countryCode);
+    }
+  }
+
+  async getLeadership(countryCode = 'WLD') {
+    const url = `${this.worldBankBase}/country/${countryCode}/indicator/SG.GEN.PARL.ZS?format=json&date=2020:2024&per_page=1&mrv=1`;
+    
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data[1] && data[1].length > 0) {
+        const percentage = Math.round(data[1][0].value);
+        const locationName = this.getLocationName(countryCode);
+        return {
+          value: `${percentage}%`,
+          detail: `Women in parliament: ${percentage}% (${locationName})`,
+          year: data[1][0].date,
+          source: 'World Bank / IPU'
+        };
+      }
+      
+      return this.getFallbackLeadership(countryCode);
+    } catch (error) {
+      return this.getFallbackLeadership(countryCode);
+    }
+  }
+
+  async getMaternalMortality(countryCode = 'WLD') {
+    const url = `${this.worldBankBase}/country/${countryCode}/indicator/SH.STA.MMRT?format=json&date=2020:2024&per_page=1&mrv=1`;
+    
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data[1] && data[1].length > 0) {
+        const mmr = Math.round(data[1][0].value);
+        const locationName = this.getLocationName(countryCode);
+        return {
+          value: `${mmr}`,
+          detail: `Maternal mortality ratio: ${mmr} per 100k live births (${locationName})`,
+          year: data[1][0].date,
+          source: 'WHO/UNICEF/UNFPA/World Bank'
+        };
+      }
+      
+      return this.getFallbackMaternalMortality(countryCode);
+    } catch (error) {
+      return this.getFallbackMaternalMortality(countryCode);
+    }
+  }
+
+  async getContraceptiveAccess(countryCode = 'WLD') {
+    const url = `${this.worldBankBase}/country/${countryCode}/indicator/SP.DYN.CONM.ZS?format=json&date=2015:2024&per_page=1&mrv=1`;
+    
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data[1] && data[1].length > 0) {
+        const percentage = Math.round(data[1][0].value);
+        const locationName = this.getLocationName(countryCode);
+        return {
+          value: `${percentage}%`,
+          detail: `Contraceptive access rate: ${percentage}% (${locationName})`,
+          year: data[1][0].date,
+          source: 'World Bank / UN Population Division'
+        };
+      }
+      
+      return this.getFallbackContraceptiveAccess(countryCode);
+    } catch (error) {
+      return this.getFallbackContraceptiveAccess(countryCode);
+    }
+  }
+
+  async getWorkforceParticipation(countryCode = 'WLD') {
+    const url = `${this.worldBankBase}/country/${countryCode}/indicator/SL.TLF.TOTL.FE.ZS?format=json&date=2020:2024&per_page=1&mrv=1`;
+    
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data[1] && data[1].length > 0) {
+        const percentage = Math.round(data[1][0].value);
+        const locationName = this.getLocationName(countryCode);
+        return {
+          value: `${percentage}%`,
+          detail: `Women in workforce: ${percentage}% (${locationName})`,
+          year: data[1][0].date,
+          source: 'World Bank / ILO'
+        };
+      }
+      
+      return this.getFallbackWorkforceParticipation(countryCode);
+    } catch (error) {
+      return this.getFallbackWorkforceParticipation(countryCode);
+    }
+  }
+
+  getLocationName(code) {
+    const names = {
+      'WLD': 'global',
+      'USA': 'US',
+      'GBR': 'UK',
+      'CAN': 'Canada'
+    };
+    return names[code] || 'global';
+  }
+
+  getFallbackPayGap(countryCode) {
+    const locationName = this.getLocationName(countryCode);
+    const fallback = {
+      WLD: { value: '16%', detail: `Gender pay gap: 16% (${locationName})` },
+      USA: { value: '16%', detail: `Gender pay gap: 16% (${locationName})` },
+      GBR: { value: '14%', detail: `Gender pay gap: 14% (${locationName})` },
+      CAN: { value: '13%', detail: `Gender pay gap: 13% (${locationName})` }
+    };
+    return fallback[countryCode] || fallback.WLD;
+  }
+
+  getFallbackLeadership(countryCode) {
+    const locationName = this.getLocationName(countryCode);
+    const fallback = {
+      WLD: { value: '27%', detail: `Women in parliament: 27% (${locationName})` },
+      USA: { value: '29%', detail: `Women in parliament: 29% (${locationName})` },
+      GBR: { value: '35%', detail: `Women in parliament: 35% (${locationName})` },
+      CAN: { value: '31%', detail: `Women in parliament: 31% (${locationName})` }
+    };
+    return fallback[countryCode] || fallback.WLD;
+  }
+
+  getFallbackMaternalMortality(countryCode) {
+    const locationName = this.getLocationName(countryCode);
+    const fallback = {
+      WLD: { value: '223', detail: `Maternal mortality ratio: 223 per 100k live births (${locationName})` },
+      USA: { value: '22', detail: `Maternal mortality ratio: 22 per 100k live births (${locationName})` },
+      GBR: { value: '10', detail: `Maternal mortality ratio: 10 per 100k live births (${locationName})` },
+      CAN: { value: '11', detail: `Maternal mortality ratio: 11 per 100k live births (${locationName})` }
+    };
+    return fallback[countryCode] || fallback.WLD;
+  }
+
+  getFallbackContraceptiveAccess(countryCode) {
+    const locationName = this.getLocationName(countryCode);
+    const fallback = {
+      WLD: { value: '218M', detail: `Women without modern contraception access: 218M (${locationName})` },
+      USA: { value: '19M', detail: `Women in contraceptive deserts: 19M (${locationName})` },
+      GBR: { value: '92%', detail: `Contraceptive access rate: 92% (${locationName})` },
+      CAN: { value: '88%', detail: `Contraceptive access rate: 88% (${locationName})` }
+    };
+    return fallback[countryCode] || fallback.WLD;
+  }
+
+  getFallbackWorkforceParticipation(countryCode) {
+    const locationName = this.getLocationName(countryCode);
+    const fallback = {
+      WLD: { value: '47%', detail: `Women in global workforce: 47%` },
+      USA: { value: '57%', detail: `Women in workforce: 57% (${locationName})` },
+      GBR: { value: '56%', detail: `Women in workforce: 56% (${locationName})` },
+      CAN: { value: '61%', detail: `Women in workforce: 61% (${locationName})` }
+    };
+    return fallback[countryCode] || fallback.WLD;
+  }
+
+  async getAllStats(location = 'global', forceRefresh = false) {
+    // Try cache first unless force refresh
+    if (!forceRefresh) {
+      const cached = this.getFromCache(location);
+      if (cached) {
+        return cached;
+      }
+    }
+
+    const countryMap = {
+      'global': 'WLD',
+      'us': 'USA',
+      'uk': 'GBR',
+      'canada': 'CAN'
+    };
+    
+    const countryCode = countryMap[location] || 'WLD';
+    
+    const [payGap, leadership, maternal, healthcare, workforce] = await Promise.all([
+      this.getPayGap(countryCode),
+      this.getLeadership(countryCode),
+      this.getMaternalMortality(countryCode),
+      this.getContraceptiveAccess(countryCode),
+      this.getWorkforceParticipation(countryCode)
+    ]);
+    
+    const stats = {
+      paygap: payGap,
+      leadership,
+      maternal,
+      healthcare,
+      workforce,
+      lastUpdated: new Date().toISOString()
+    };
+
+    // Save to cache
+    this.saveToCache(location, stats);
+    
+    return stats;
+  }
+}
+
+const MindTheGap = () => {
+  const [selectedStat, setSelectedStat] = useState('paygap');
+  const [selectedCountry, setSelectedCountry] = useState('global');
+  const [copied, setCopied] = useState(false);
+  const [view, setView] = useState('selector');
+  const [loading, setLoading] = useState(false);
+  const [liveData, setLiveData] = useState(null);
+  const [api] = useState(() => new GenderStatsAPI());
+  const [lastRefresh, setLastRefresh] = useState(null);
+
+  // Auto-refresh every 24 hours
+  useEffect(() => {
+    const refreshData = async () => {
+      setLoading(true);
+      try {
+        const data = await api.getAllStats(selectedCountry);
+        setLiveData(data);
+        setLastRefresh(new Date());
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    refreshData();
+
+    // Set up 24-hour refresh interval
+    const interval = setInterval(refreshData, 24 * 60 * 60 * 1000);
+    
+    return () => clearInterval(interval);
+  }, [selectedCountry, api]);
+
+  // Manual refresh
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      const data = await api.getAllStats(selectedCountry, true);
+      setLiveData(data);
+      setLastRefresh(new Date());
+    } catch (error) {
+      console.error('Failed to refresh data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const statConfig = {
+    paygap: {
+      title: 'Gender Pay Gap',
+      icon: TrendingDown,
+      color: 'from-slate-600 to-slate-700'
+    },
+    leadership: {
+      title: 'Leadership Representation',
+      icon: Users,
+      color: 'from-indigo-700 to-indigo-800'
+    },
+    maternal: {
+      title: 'Maternal Mortality Rate',
+      icon: Heart,
+      color: 'from-slate-700 to-slate-800'
+    },
+    healthcare: {
+      title: 'Contraceptive Access',
+      icon: AlertCircle,
+      color: 'from-gray-600 to-gray-700'
+    },
+    workforce: {
+      title: 'Workforce Participation',
+      icon: Briefcase,
+      color: 'from-slate-600 to-slate-800'
+    }
+  };
+
+  const currentStatConfig = statConfig[selectedStat];
+  const currentData = liveData?.[selectedStat] || { value: '...', detail: 'Loading...' };
+  const Icon = currentStatConfig.icon;
+
+  const generateEmbedCode = () => {
+    const badgeUrl = `https://mindthegap.app/badge/${selectedStat}/${selectedCountry}`;
+    const dashboardUrl = `https://mindthegap.app/dashboard`;
+    return `<a href="${dashboardUrl}" style="text-decoration:none;"><img src="${badgeUrl}" alt="Mind the Gap - ${currentStatConfig.title}" /></a>`;
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(generateEmbedCode());
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  if (view === 'dashboard') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-900 to-gray-900 p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-center mb-12">
+            <div>
+              <h1 className="text-5xl font-bold text-white mb-2">Mind the Gap</h1>
+              <p className="text-slate-300 text-lg">Global & Local Women's Rights Statistics</p>
+              {lastRefresh && (
+                <p className="text-slate-400 text-sm mt-2">
+                  Last updated: {lastRefresh.toLocaleString()}
+                </p>
+              )}
+            </div>
+            <div className="flex gap-4">
+              <button 
+                onClick={handleRefresh}
+                disabled={loading}
+                className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all flex items-center gap-2 disabled:opacity-50"
+              >
+                <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
+                Refresh Data
+              </button>
+              <button 
+                onClick={() => setView('selector')}
+                className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all"
+              >
+                Create Badge
+              </button>
+            </div>
+          </div>
+
+          {loading && !liveData ? (
+            <div className="text-center text-white py-12">
+              <RefreshCw className="w-12 h-12 animate-spin mx-auto mb-4" />
+              <p>Loading real-time data...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Object.entries(statConfig).map(([key, config]) => {
+                const StatIcon = config.icon;
+                const data = liveData?.[key] || { value: '...', detail: 'Loading...' };
+                
+                return (
+                  <div key={key} className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:border-white/40 transition-all">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className={`p-3 rounded-lg bg-gradient-to-r ${config.color}`}>
+                        <StatIcon className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-white">{config.title}</h3>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-3xl font-bold text-white">{data.value}</span>
+                      </div>
+                      <p className="text-sm text-slate-300">{data.detail}</p>
+                      {data.source && (
+                        <p className="text-xs text-slate-400">Source: {data.source}</p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          <div className="mt-12 bg-white/10 backdrop-blur-lg rounded-xl p-8 border border-white/20">
+            <h2 className="text-2xl font-bold text-white mb-4">About Mind the Gap</h2>
+            <p className="text-slate-300 mb-4">
+              Mind the Gap is a real-time statistics tracker highlighting ongoing disparities in women's rights, 
+              economic equality, and healthcare access worldwide. Data automatically refreshes every 24 hours.
+            </p>
+            <p className="text-slate-400 text-sm">
+              Data sourced from World Bank, WHO, ILO, and UN agencies. Statistics represent the most recent available data.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-900 to-gray-900 p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-6xl font-bold text-white mb-4">Mind the Gap</h1>
+          <p className="text-xl text-slate-300">Create your email signature badge</p>
+          {lastRefresh && (
+            <p className="text-slate-400 text-sm mt-2">
+              Data last updated: {lastRefresh.toLocaleString()}
+            </p>
+          )}
+        </div>
+
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 mb-8">
+          <div className="mb-8 p-6 bg-indigo-900/30 rounded-xl border border-indigo-500/30">
+            <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <span className="bg-indigo-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">1</span>
+              Choose Which Statistic to Display
+            </h3>
+            <p className="text-slate-300 text-sm mb-4">
+              Click on one of the boxes below to select what information you want to show in your email signature.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            {Object.entries(statConfig).map(([key, config]) => {
+              const StatIcon = config.icon;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSelectedStat(key)}
+                  className={`p-4 rounded-xl border-2 transition-all text-left ${
+                    selectedStat === key
+                      ? 'border-white bg-white/20'
+                      : 'border-white/30 bg-white/5 hover:bg-white/10'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg bg-gradient-to-r ${config.color}`}>
+                      <StatIcon className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="font-semibold text-white">{config.title}</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mb-8 p-6 bg-indigo-900/30 rounded-xl border border-indigo-500/30">
+            <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <span className="bg-indigo-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">2</span>
+              Choose Your Location
+            </h3>
+            <p className="text-slate-300 text-sm mb-4">
+              Click on the location you want statistics for. "Global" shows worldwide data.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            {['global', 'us', 'uk', 'canada'].map((country) => (
+              <button
+                key={country}
+                onClick={() => setSelectedCountry(country)}
+                className={`p-4 rounded-xl border-2 transition-all ${
+                  selectedCountry === country
+                    ? 'border-white bg-white/20'
+                    : 'border-white/30 bg-white/5 hover:bg-white/10'
+                }`}
+              >
+                <span className="font-semibold text-white uppercase">
+                  {country === 'global' ? 'Global' : country}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div className="mb-8 p-6 bg-indigo-900/30 rounded-xl border border-indigo-500/30">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                <span className="bg-indigo-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">3</span>
+                Preview Your Badge
+              </h3>
+              <button
+                onClick={handleRefresh}
+                disabled={loading}
+                className="text-sm px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded transition-all flex items-center gap-1 disabled:opacity-50"
+              >
+                <RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin' : ''}`} />
+                Refresh
+              </button>
+            </div>
+            <p className="text-slate-300 text-sm mb-4">
+              This is what your badge will look like. It will appear in your email signature and updates automatically.
+            </p>
+          </div>
+          
+          <div className={`p-6 rounded-xl bg-gradient-to-r ${currentStatConfig.color} mb-8 ${loading ? 'opacity-50' : ''}`}>
+            <div className="flex items-center gap-4">
+              <Icon className="w-8 h-8 text-white" />
+              <div className="flex-1">
+                <div className="text-white/90 text-sm font-semibold mb-1">MIND THE GAP</div>
+                <div className="text-white font-bold text-lg">{currentData.detail}</div>
+              </div>
+              <div className="text-4xl font-bold text-white">{currentData.value}</div>
+            </div>
+          </div>
+
+          <div className="mb-8 p-6 bg-indigo-900/30 rounded-xl border border-indigo-500/30">
+            <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <span className="bg-indigo-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">4</span>
+              Copy the Code
+            </h3>
+            <p className="text-slate-300 text-sm mb-4">
+              Click the "Copy Embed Code" button below. This will copy the code you need to paste into your email signature settings.
+            </p>
+          </div>
+
+          <div className="flex gap-4">
+            <button
+              onClick={copyToClipboard}
+              className="flex-1 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-6 py-4 rounded-xl font-semibold hover:from-indigo-700 hover:to-indigo-800 transition-all flex items-center justify-center gap-2 text-lg"
+            >
+              {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+              {copied ? 'Code Copied to Clipboard!' : 'Copy Embed Code'}
+            </button>
+            
+            <button
+              onClick={() => setView('dashboard')}
+              className="px-6 py-4 bg-white/10 hover:bg-white/20 text-white rounded-xl font-semibold transition-all"
+            >
+              View All Statistics
+            </button>
+          </div>
+
+          <div className="mt-6 p-4 bg-white/5 rounded-lg border border-white/10">
+            <p className="text-slate-300 text-sm mb-2 font-semibold">Your Embed Code (this was copied when you clicked the button above):</p>
+            <code className="text-slate-400 text-xs break-all block bg-slate-900/50 p-3 rounded">{generateEmbedCode()}</code>
+          </div>
+
+          <div className="mt-6 p-6 bg-yellow-900/20 rounded-xl border border-yellow-600/30">
+            <h4 className="text-lg font-bold text-yellow-200 mb-3">How to Add This to Your Email Signature:</h4>
+            <ol className="text-slate-300 text-sm space-y-2 list-decimal list-inside">
+              <li>Open your email program (Gmail, Outlook, etc.)</li>
+              <li>Go to Settings → View all settings → Signature (in Gmail) or File → Options → Mail → Signatures (in Outlook)</li>
+              <li>Click in your signature area where you want the badge to appear</li>
+              <li>Paste the code you copied above (press Ctrl+V on Windows or Cmd+V on Mac)</li>
+              <li>Save your signature</li>
+            </ol>
+            <p className="text-slate-400 text-xs mt-4">
+              Note: Some email programs may require you to paste the code in "HTML mode" or "Source code" view. Look for a button that says "&lt;/&gt;" or "HTML" in your signature editor.
+            </p>
+          </div>
+        </div>
+
+        <div className="text-center text-slate-400 text-sm">
+          <p>Badge updates automatically every 24 hours with real-time data • Click badge to view full dashboard</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MindTheGap;
