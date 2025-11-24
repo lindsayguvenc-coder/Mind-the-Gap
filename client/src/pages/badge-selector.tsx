@@ -291,7 +291,7 @@ export default function BadgeSelector() {
 
               {/* White background section with tagline */}
               <div className="bg-white py-2 text-center">
-                <div className="text-black text-xs font-bold italic tracking-wide">
+                <div className="text-white text-xs font-bold italic tracking-wide">
                   Mind it. Measure it. Move it.
                 </div>
               </div>

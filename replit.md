@@ -11,7 +11,7 @@ Preferred communication style: Simple, everyday language.
 ### Badge Design
 - **Size**: 500x150 pixels (SVG and PNG formats)
 - **Layout**: Colored top section (120px) + white background bottom section (30px)
-- **Tagline Placement**: "Mind it. Measure it. Move it." centered in white background space in black text for visibility on any background
+- **Tagline Placement**: "Mind it. Measure it. Move it." centered in white background space in bold white text for visibility in email signatures
 - **Color Scheme**: Each statistic has a unique color:
   - Gender Pay Gap: #6e6cbf (purple-blue)
   - Leadership: #b573c3 (purple)
