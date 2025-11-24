@@ -12,6 +12,7 @@ function Router() {
     <Switch>
       <Route path="/" component={BadgeSelector} />
       <Route path="/badge" component={BadgeSelector} />
+      <Route path="/badges" component={BadgeSelector} />
       <Route path="/dashboard" component={Dashboard} />
       <Route component={NotFound} />
     </Switch>

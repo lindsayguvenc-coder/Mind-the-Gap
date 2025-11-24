@@ -52,8 +52,8 @@ Preferred communication style: Simple, everyday language.
   - `/api/stats/:country` - Fetch all statistics for a specific country
   - `/api/trends/:stat/:country` - Fetch historical time-series data (2015-2024) for a specific statistic and country
   - `/api/export/:country?format=csv|json` - Export all statistics in CSV or JSON format with proper download headers
-  - `/api/badge/:stat/:country` - Generate embeddable SVG badge (500x80) for a specific statistic (web use)
-  - `/api/badge-png/:stat/:country` - Generate PNG badge (500x80) from SVG for email signature compatibility
+  - `/api/badge/:stat/:country1/:country2` - Generate embeddable SVG comparison badge (500x120) showing two locations side-by-side
+  - `/api/badge-png/:stat/:country1/:country2` - Generate PNG comparison badge (500x120) from SVG for email signature compatibility
   - `/api/share/:stat/:country` - Generate social media share card (1200x630 SVG) optimized for Twitter/LinkedIn/Facebook
 - **Response Format**: JSON with structured statistics schema (value, detail, year, source)
 - **Security**: All badge endpoints include whitelist validation for stat/country params and SVG text sanitization to prevent injection attacks
@@ -183,3 +183,15 @@ Preferred communication style: Simple, everyday language.
 - **Use Cases**: 
   - PNG: Gmail signatures, Outlook signatures, email marketing campaigns showing global vs local comparison
   - SVG: Website embedding, web documentation, modern web platforms with comparison data
+
+### Tagline Implementation
+- **Tagline**: "Mind it. Measure it. Move it."
+- **Purpose**: Reinforces action-oriented mission and brand identity across all touchpoints
+- **Frontend Implementation**:
+  - Dashboard page (`/dashboard`): Italic subtitle below "Mind the Gap" heading with `data-testid="text-tagline"`
+  - Badge Selector page (`/badges`, `/`, `/badge`): Italic subtitle below "Mind the Gap" heading with `data-testid="text-tagline"`
+- **Badge Assets**:
+  - SVG/PNG Badges (500x120): Tagline rendered at y="32" with font-size 8px, italic styling, 75% opacity
+  - Share Cards (1200x630): Tagline rendered at y="108" with font-size 16px, italic styling, 75% opacity
+- **Styling Consistency**: All instances use italic font-style and lighter opacity (75%) for visual hierarchy
+- **Routing Update**: Added `/badges` route to match user expectations (complements existing `/` and `/badge` routes)
