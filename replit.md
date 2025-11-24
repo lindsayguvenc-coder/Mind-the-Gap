@@ -167,12 +167,19 @@ Preferred communication style: Simple, everyday language.
 ### Email Signature Badge Support
 - **Problem Solved**: Gmail and most email clients don't support SVG images in signatures
 - **Solution**: Dual-format badge generation with format-specific use cases
-- **PNG Badge Endpoint**: `/api/badge-png/:stat/:country` converts SVG badges to PNG using Sharp library
-- **Image Format**: 500x80 PNG optimized for email client compatibility
-- **UI Enhancement**: Badge selector offers PNG/SVG toggle with clear labeling (PNG for email, SVG for websites)
+- **Badge Format**: Comparison badges showing Global vs. selected location side-by-side
+- **Endpoints**: 
+  - SVG: `/api/badge/:stat/:country1/:country2` (500x120 SVG with two-column comparison)
+  - PNG: `/api/badge-png/:stat/:country1/:country2` (500x120 PNG converted via Sharp)
+- **Badge Design**: Two-column layout with translucent boxes showing values for both locations
+- **UI Enhancement**: 
+  - Global location always displayed (fixed)
+  - User selects comparison location (US, UK, Canada, or Mexico)
+  - Badge preview shows real-time data for both locations
+  - Format selector for PNG (email) vs SVG (web)
 - **Default Selection**: PNG format selected by default for optimal email client support
 - **Security**: Comprehensive input validation, whitelist checking, and SVG text sanitization to prevent injection attacks
 - **Performance**: Server-side Sharp conversion ensures consistent rendering across all email clients
 - **Use Cases**: 
-  - PNG: Gmail signatures, Outlook signatures, email marketing campaigns
-  - SVG: Website embedding, web documentation, modern web platforms
+  - PNG: Gmail signatures, Outlook signatures, email marketing campaigns showing global vs local comparison
+  - SVG: Website embedding, web documentation, modern web platforms with comparison data

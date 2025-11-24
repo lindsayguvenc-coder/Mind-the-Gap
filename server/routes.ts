@@ -497,9 +497,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/badge/:stat/:country", async (req, res) => {
+  app.get("/api/badge/:stat/:country1/:country2", async (req, res) => {
     try {
-      const { stat, country } = req.params;
+      const { stat, country1, country2 } = req.params;
       
       // Validate stat parameter (whitelist check)
       if (!validStats.includes(stat as any)) {
@@ -507,25 +507,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).send('Invalid stat type');
       }
       
-      const location = country || 'global';
+      const location1 = country1 || 'global';
+      const location2 = country2 || 'global';
       
-      // Validate country parameter (whitelist check)
-      if (!(location in countryCodeMap)) {
+      // Validate country parameters (whitelist check)
+      if (!(location1 in countryCodeMap) || !(location2 in countryCodeMap)) {
         res.setHeader('Cache-Control', 'public, max-age=86400');
         return res.status(400).send('Invalid country');
       }
       
-      const cacheKey = `stats_${location}`;
-      
-      // Check cache
-      let stats;
-      const cached = cache[cacheKey];
-      if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
-        stats = cached.data;
-      } else {
-        const countryCode = countryCodeMap[location];
+      // Fetch both countries' stats
+      const getStatsForCountry = async (location: string) => {
+        const cacheKey = `stats_${location}`;
+        const cached = cache[cacheKey];
+        if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+          return cached.data;
+        }
         
-        // Fetch all stats in parallel
+        const countryCode = countryCodeMap[location];
         const [payGap, leadership, maternal, healthcare, workforce] = await Promise.all([
           getPayGap(countryCode),
           getLeadership(countryCode),
@@ -534,7 +533,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           getWorkforceParticipation(countryCode)
         ]);
         
-        stats = {
+        const stats = {
           paygap: payGap,
           leadership,
           maternal,
@@ -548,28 +547,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
           data: stats,
           timestamp: Date.now()
         };
-      }
+        
+        return stats;
+      };
 
-      const data = stats[stat as keyof typeof stats];
-      if (!data || typeof data === 'string') {
+      const [stats1, stats2] = await Promise.all([
+        getStatsForCountry(location1),
+        getStatsForCountry(location2)
+      ]);
+
+      const data1 = stats1[stat as keyof typeof stats1];
+      const data2 = stats2[stat as keyof typeof stats2];
+      
+      if (!data1 || typeof data1 === 'string' || !data2 || typeof data2 === 'string') {
         res.setHeader('Cache-Control', 'public, max-age=86400');
         return res.status(404).send('Stat not found');
       }
 
       // Sanitize values to prevent SVG injection
-      const statValue = escapeSvgText(data.value);
-      const statDetail = escapeSvgText(data.detail);
+      const value1 = escapeSvgText(data1.value);
+      const value2 = escapeSvgText(data2.value);
+      const location1Name = getLocationName(countryCodeMap[location1]);
+      const location2Name = getLocationName(countryCodeMap[location2]);
       
       // Get stat-specific color
       const statColor = statColors[stat] || '#5271bf';
+      
+      // Get stat title
+      const statTitles: Record<string, string> = {
+        'paygap': 'Gender Pay Gap',
+        'leadership': 'Leadership Representation',
+        'maternal': 'Maternal Mortality Rate',
+        'healthcare': 'Contraceptive Access',
+        'workforce': 'Workforce Participation'
+      };
+      const statTitle = statTitles[stat] || 'Statistic';
 
-      // Generate SVG badge
+      // Generate SVG badge with comparison
       const svg = `
-        <svg width="500" height="80" xmlns="http://www.w3.org/2000/svg">
-          <rect width="500" height="80" fill="${statColor}" rx="6"/>
-          <text x="20" y="30" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
-          <text x="20" y="55" font-family="Inter, sans-serif" font-size="16" font-weight="700" fill="white">${statDetail}</text>
-          <text x="450" y="55" font-family="JetBrains Mono, monospace" font-size="32" font-weight="700" fill="white" text-anchor="end">${statValue}</text>
+        <svg width="500" height="120" xmlns="http://www.w3.org/2000/svg">
+          <rect width="500" height="120" fill="${statColor}" rx="6"/>
+          
+          <!-- Header -->
+          <text x="20" y="25" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
+          
+          <!-- Two-column comparison -->
+          <rect x="20" y="35" width="220" height="60" fill="rgba(255,255,255,0.15)" rx="4"/>
+          <rect x="260" y="35" width="220" height="60" fill="rgba(255,255,255,0.15)" rx="4"/>
+          
+          <!-- Column 1 -->
+          <text x="130" y="52" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.8)" text-anchor="middle">${escapeSvgText(location1Name.toUpperCase())}</text>
+          <text x="130" y="78" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="white" text-anchor="middle">${value1}</text>
+          
+          <!-- Column 2 -->
+          <text x="370" y="52" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.8)" text-anchor="middle">${escapeSvgText(location2Name.toUpperCase())}</text>
+          <text x="370" y="78" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="white" text-anchor="middle">${value2}</text>
+          
+          <!-- Footer -->
+          <text x="20" y="112" font-family="Inter, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.9)">${escapeSvgText(statTitle)}</text>
         </svg>
       `;
 
@@ -583,9 +618,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/badge-png/:stat/:country", async (req, res) => {
+  app.get("/api/badge-png/:stat/:country1/:country2", async (req, res) => {
     try {
-      const { stat, country } = req.params;
+      const { stat, country1, country2 } = req.params;
       
       // Validate stat parameter (whitelist check)
       if (!validStats.includes(stat as any)) {
@@ -593,25 +628,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).send('Invalid stat type');
       }
       
-      const location = country || 'global';
+      const location1 = country1 || 'global';
+      const location2 = country2 || 'global';
       
-      // Validate country parameter (whitelist check)
-      if (!(location in countryCodeMap)) {
+      // Validate country parameters (whitelist check)
+      if (!(location1 in countryCodeMap) || !(location2 in countryCodeMap)) {
         res.setHeader('Cache-Control', 'public, max-age=86400');
         return res.status(400).send('Invalid country');
       }
       
-      const cacheKey = `stats_${location}`;
-      
-      // Check cache
-      let stats;
-      const cached = cache[cacheKey];
-      if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
-        stats = cached.data;
-      } else {
-        const countryCode = countryCodeMap[location];
+      // Fetch both countries' stats
+      const getStatsForCountry = async (location: string) => {
+        const cacheKey = `stats_${location}`;
+        const cached = cache[cacheKey];
+        if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+          return cached.data;
+        }
         
-        // Fetch all stats in parallel
+        const countryCode = countryCodeMap[location];
         const [payGap, leadership, maternal, healthcare, workforce] = await Promise.all([
           getPayGap(countryCode),
           getLeadership(countryCode),
@@ -620,7 +654,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           getWorkforceParticipation(countryCode)
         ]);
         
-        stats = {
+        const stats = {
           paygap: payGap,
           leadership,
           maternal,
@@ -634,28 +668,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
           data: stats,
           timestamp: Date.now()
         };
-      }
+        
+        return stats;
+      };
 
-      const data = stats[stat as keyof typeof stats];
-      if (!data || typeof data === 'string') {
+      const [stats1, stats2] = await Promise.all([
+        getStatsForCountry(location1),
+        getStatsForCountry(location2)
+      ]);
+
+      const data1 = stats1[stat as keyof typeof stats1];
+      const data2 = stats2[stat as keyof typeof stats2];
+      
+      if (!data1 || typeof data1 === 'string' || !data2 || typeof data2 === 'string') {
         res.setHeader('Cache-Control', 'public, max-age=86400');
         return res.status(404).send('Stat not found');
       }
 
       // Sanitize values to prevent SVG injection
-      const statValue = escapeSvgText(data.value);
-      const statDetail = escapeSvgText(data.detail);
+      const value1 = escapeSvgText(data1.value);
+      const value2 = escapeSvgText(data2.value);
+      const location1Name = getLocationName(countryCodeMap[location1]);
+      const location2Name = getLocationName(countryCodeMap[location2]);
       
       // Get stat-specific color
       const statColor = statColors[stat] || '#5271bf';
+      
+      // Get stat title
+      const statTitles: Record<string, string> = {
+        'paygap': 'Gender Pay Gap',
+        'leadership': 'Leadership Representation',
+        'maternal': 'Maternal Mortality Rate',
+        'healthcare': 'Contraceptive Access',
+        'workforce': 'Workforce Participation'
+      };
+      const statTitle = statTitles[stat] || 'Statistic';
 
-      // Generate SVG badge (same as SVG endpoint)
+      // Generate SVG badge with comparison (same as SVG endpoint)
       const svg = `
-        <svg width="500" height="80" xmlns="http://www.w3.org/2000/svg">
-          <rect width="500" height="80" fill="${statColor}" rx="6"/>
-          <text x="20" y="30" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
-          <text x="20" y="55" font-family="Inter, sans-serif" font-size="16" font-weight="700" fill="white">${statDetail}</text>
-          <text x="450" y="55" font-family="JetBrains Mono, monospace" font-size="32" font-weight="700" fill="white" text-anchor="end">${statValue}</text>
+        <svg width="500" height="120" xmlns="http://www.w3.org/2000/svg">
+          <rect width="500" height="120" fill="${statColor}" rx="6"/>
+          
+          <!-- Header -->
+          <text x="20" y="25" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
+          
+          <!-- Two-column comparison -->
+          <rect x="20" y="35" width="220" height="60" fill="rgba(255,255,255,0.15)" rx="4"/>
+          <rect x="260" y="35" width="220" height="60" fill="rgba(255,255,255,0.15)" rx="4"/>
+          
+          <!-- Column 1 -->
+          <text x="130" y="52" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.8)" text-anchor="middle">${escapeSvgText(location1Name.toUpperCase())}</text>
+          <text x="130" y="78" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="white" text-anchor="middle">${value1}</text>
+          
+          <!-- Column 2 -->
+          <text x="370" y="52" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.8)" text-anchor="middle">${escapeSvgText(location2Name.toUpperCase())}</text>
+          <text x="370" y="78" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="white" text-anchor="middle">${value2}</text>
+          
+          <!-- Footer -->
+          <text x="20" y="112" font-family="Inter, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.9)">${escapeSvgText(statTitle)}</text>
         </svg>
       `;
 

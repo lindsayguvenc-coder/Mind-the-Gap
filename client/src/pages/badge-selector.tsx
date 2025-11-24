@@ -51,20 +51,36 @@ const statConfigs: Record<StatType, StatConfig> = {
 
 const countryLabels: Record<CountryCode, string> = {
   global: 'Global',
-  us: 'US',
-  uk: 'UK',
+  us: 'United States',
+  uk: 'United Kingdom',
   canada: 'Canada',
   mexico: 'Mexico',
 };
 
+// Location options for comparison (excluding global)
+const comparisonCountries: Exclude<CountryCode, 'global'>[] = ['us', 'uk', 'canada', 'mexico'];
+
 export default function BadgeSelector() {
   const [selectedStat, setSelectedStat] = useState<StatType>('paygap');
-  const [selectedCountry, setSelectedCountry] = useState<CountryCode>('global');
+  const [selectedCountry, setSelectedCountry] = useState<CountryCode>('us');
   const [badgeFormat, setBadgeFormat] = useState<'png' | 'svg'>('png');
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
-  const { data: stats, isLoading, refetch, isFetching } = useQuery<AllStats>({
+  // Fetch global stats
+  const { data: globalStats, isLoading: globalLoading } = useQuery<AllStats>({
+    queryKey: ['/api/stats', 'global'],
+    queryFn: async () => {
+      const response = await fetch(`/api/stats/global`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch global statistics');
+      }
+      return response.json();
+    },
+  });
+
+  // Fetch selected country stats
+  const { data: localStats, isLoading: localLoading, refetch, isFetching } = useQuery<AllStats>({
     queryKey: ['/api/stats', selectedCountry],
     queryFn: async () => {
       const response = await fetch(`/api/stats/${selectedCountry}`);
@@ -76,12 +92,14 @@ export default function BadgeSelector() {
   });
 
   const currentStatConfig = statConfigs[selectedStat];
-  const currentData = stats?.[selectedStat] || { value: '...', detail: 'Loading...' };
+  const globalData = globalStats?.[selectedStat] || { value: '...', detail: 'Loading...' };
+  const localData = localStats?.[selectedStat] || { value: '...', detail: 'Loading...' };
   const Icon = currentStatConfig.icon;
+  const isLoading = globalLoading || localLoading;
 
   const generateEmbedCode = () => {
     const endpoint = badgeFormat === 'png' ? 'badge-png' : 'badge';
-    const badgeUrl = `${window.location.origin}/api/${endpoint}/${selectedStat}/${selectedCountry}`;
+    const badgeUrl = `${window.location.origin}/api/${endpoint}/${selectedStat}/global/${selectedCountry}`;
     const dashboardUrl = `${window.location.origin}/dashboard`;
     return `<a href="${dashboardUrl}" style="text-decoration:none;"><img src="${badgeUrl}" alt="Mind the Gap - ${currentStatConfig.title}" /></a>`;
   };
@@ -126,9 +144,9 @@ export default function BadgeSelector() {
         <header className="text-center mb-12">
           <h1 className="text-6xl font-bold mb-4" data-testid="text-badge-selector-title">Mind the Gap</h1>
           <p className="text-xl text-muted-foreground">Create your email signature badge</p>
-          {stats?.lastUpdated && (
+          {localStats?.lastUpdated && (
             <p className="text-sm text-muted-foreground mt-2" data-testid="text-last-updated">
-              Data last updated: {new Date(stats.lastUpdated).toLocaleString()}
+              Data last updated: {new Date(localStats.lastUpdated).toLocaleString()}
             </p>
           )}
         </header>
@@ -173,15 +191,15 @@ export default function BadgeSelector() {
             <div className="p-6 bg-primary/10 rounded-lg border border-primary/20">
               <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <Badge className="w-8 h-8 flex items-center justify-center font-bold p-0">2</Badge>
-                Choose Your Location
+                Choose Comparison Location
               </h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Click on the location you want statistics for. "Global" shows worldwide data.
+                Your badge will show Global data compared to your selected location.
               </p>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {(Object.entries(countryLabels) as [CountryCode, string][]).map(([code, label]) => (
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+              {comparisonCountries.map((code) => (
                 <button
                   key={code}
                   onClick={() => setSelectedCountry(code)}
@@ -192,7 +210,7 @@ export default function BadgeSelector() {
                   }`}
                   data-testid={`button-select-country-${code}`}
                 >
-                  <span className="font-semibold uppercase">{label}</span>
+                  <span className="font-semibold">{countryLabels[code]}</span>
                 </button>
               ))}
             </div>
@@ -225,14 +243,30 @@ export default function BadgeSelector() {
               style={{ backgroundColor: currentStatConfig.color }}
               data-testid="badge-preview"
             >
-              <div className="flex items-center gap-4">
-                <Icon className="w-8 h-8 text-white" />
-                <div className="flex-1">
-                  <div className="text-white/90 text-sm font-semibold mb-1">MIND THE GAP</div>
-                  <div className="text-white font-bold text-lg">{currentData.detail}</div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <Icon className="w-6 h-6 text-white" />
+                  <div className="text-white/90 text-sm font-semibold">MIND THE GAP</div>
                 </div>
-                <div className="text-4xl font-bold font-mono text-white" data-testid="badge-value">
-                  {currentData.value}
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white/10 rounded-lg p-3">
+                    <div className="text-white/80 text-xs font-semibold mb-1">GLOBAL</div>
+                    <div className="text-white font-bold text-2xl font-mono" data-testid="badge-value-global">
+                      {globalData.value}
+                    </div>
+                  </div>
+                  
+                  <div className="bg-white/10 rounded-lg p-3">
+                    <div className="text-white/80 text-xs font-semibold mb-1 uppercase">{countryLabels[selectedCountry]}</div>
+                    <div className="text-white font-bold text-2xl font-mono" data-testid="badge-value-local">
+                      {localData.value}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="text-white/90 text-sm font-medium">
+                  {currentStatConfig.title}
                 </div>
               </div>
             </div>
