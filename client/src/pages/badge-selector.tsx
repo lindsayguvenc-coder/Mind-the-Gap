@@ -101,7 +101,8 @@ export default function BadgeSelector() {
     const endpoint = badgeFormat === 'png' ? 'badge-png' : 'badge';
     const badgeUrl = `${window.location.origin}/api/${endpoint}/${selectedStat}/global/${selectedCountry}`;
     const dashboardUrl = `${window.location.origin}/dashboard`;
-    return `<a href="${dashboardUrl}" style="text-decoration:none;"><img src="${badgeUrl}" alt="Mind the Gap - ${currentStatConfig.title}" /></a>`;
+    const titleText = `${currentStatConfig.title}: Global vs ${countryLabels[selectedCountry]} - Data from World Bank API, updates daily. Click to view Mind the Gap dashboard.`;
+    return `<a href="${dashboardUrl}" style="text-decoration:none;"><img src="${badgeUrl}" alt="Mind the Gap - ${currentStatConfig.title}" title="${titleText}" /></a>`;
   };
 
   const copyToClipboard = async () => {

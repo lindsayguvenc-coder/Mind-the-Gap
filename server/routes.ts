@@ -606,7 +606,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           <text x="370" y="78" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="white" text-anchor="middle">${value2}</text>
           
           <!-- Footer -->
-          <text x="20" y="112" font-family="Inter, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.9)">${escapeSvgText(statTitle)}</text>
+          <text x="20" y="104" font-family="Inter, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.9)">${escapeSvgText(statTitle)}</text>
+          <text x="20" y="115" font-family="Inter, sans-serif" font-size="7" font-weight="400" fill="rgba(255,255,255,0.6)">Source: World Bank</text>
         </svg>
       `;
 
@@ -728,7 +729,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           <text x="370" y="78" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="white" text-anchor="middle">${value2}</text>
           
           <!-- Footer -->
-          <text x="20" y="112" font-family="Inter, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.9)">${escapeSvgText(statTitle)}</text>
+          <text x="20" y="104" font-family="Inter, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.9)">${escapeSvgText(statTitle)}</text>
+          <text x="20" y="115" font-family="Inter, sans-serif" font-size="7" font-weight="400" fill="rgba(255,255,255,0.6)">Source: World Bank</text>
         </svg>
       `;
 

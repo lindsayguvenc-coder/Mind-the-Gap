@@ -33,6 +33,7 @@ Preferred communication style: Simple, everyday language.
 - **CSS Framework**: Tailwind CSS with custom configuration
 - **Typography**: Inter for UI elements, JetBrains Mono for numerical data display
 - **Theme System**: HSL-based color variables for light/dark mode support
+- **Accent Color**: Orange (#ffc569 / 42 100% 71%) used for highlights, selections, and active states
 - **Layout Primitives**: Consistent spacing scale (2, 4, 6, 8, 12) from Tailwind units
 
 **State Management**
@@ -195,3 +196,14 @@ Preferred communication style: Simple, everyday language.
   - Share Cards (1200x630): Tagline rendered at y="108" with font-size 16px, italic styling, 75% opacity
 - **Styling Consistency**: All instances use italic font-style and lighter opacity (75%) for visual hierarchy
 - **Routing Update**: Added `/badges` route to match user expectations (complements existing `/` and `/badge` routes)
+
+### Mission Statement
+- **Location**: Bottom of Dashboard and Badge Selector pages in dedicated card with light background
+- **Content**: Three-paragraph mission statement ending with tagline in italic
+- **Purpose**: Communicates core mission to make women's issues impossible to ignore through data visibility
+
+### Data Attribution & Source Information
+- **Badge Attribution**: "Source: World Bank" text added at bottom of all badges (SVG/PNG) in small 7px font with subtle opacity
+- **Embed Code Enhancement**: Title attribute added with detailed source information: "{Statistic}: Global vs {Location} - Data from World Bank API, updates daily. Click to view Mind the Gap dashboard."
+- **Link Behavior**: All embedded badges link to dashboard (`/dashboard`) for full statistics and context
+- **Hover Information**: Title attribute provides source details on hover, enhancing transparency and credibility
