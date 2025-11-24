@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'wouter';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import type { AllStats, CountryCode, StatType } from '@shared/schema';
 import type { LucideIcon } from 'lucide-react';
 
@@ -355,6 +356,200 @@ export default function BadgeSelector() {
               </code>
             </div>
           </div>
+        </Card>
+
+        <Card className="mt-8 p-8">
+          <h2 className="text-2xl font-bold mb-6">How to Use Your Badge</h2>
+          <p className="text-muted-foreground mb-6">
+            Follow these platform-specific instructions to add your badge to email signatures, websites, and more.
+          </p>
+
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="gmail" data-testid="accordion-gmail">
+              <AccordionTrigger className="text-lg font-semibold">
+                Gmail Signature
+              </AccordionTrigger>
+              <AccordionContent className="text-sm space-y-4 pt-4">
+                <div>
+                  <p className="font-semibold mb-2">Step 1: Access Gmail Settings</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>Open Gmail and click the <strong>Settings gear icon</strong> in the top-right</li>
+                    <li>Select <strong>"See all settings"</strong></li>
+                    <li>Under the <strong>General tab</strong>, scroll to the <strong>Signature section</strong></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="font-semibold mb-2">Step 2: Copy the Badge Embed Code</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>Use PNG format (selected by default above) for best email client compatibility</li>
+                    <li>Click the <strong>"Copy Embed Code"</strong> button above</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="font-semibold mb-2">Step 3: Add to Your Signature</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>In the signature editor, position your cursor where you want the badge</li>
+                    <li>Click the <strong>Insert Image icon</strong> in the toolbar</li>
+                    <li>Paste the badge URL from the embed code (the URL between src=" and ")</li>
+                    <li>Click <strong>Insert</strong></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="font-semibold mb-2">Step 4: Make it Clickable</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>Click to select the badge image in your signature</li>
+                    <li>Click the <strong>Link icon</strong> in the toolbar</li>
+                    <li>Paste the dashboard URL from the embed code</li>
+                    <li>Click <strong>OK</strong>, then <strong>Save Changes</strong> at the bottom</li>
+                  </ul>
+                </div>
+
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-xs text-muted-foreground">
+                    <strong>Pro Tip:</strong> PNG format ensures your badge displays correctly in Gmail, Apple Mail, and other email clients that don't support SVG.
+                  </p>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="outlook" data-testid="accordion-outlook">
+              <AccordionTrigger className="text-lg font-semibold">
+                Outlook Signature
+              </AccordionTrigger>
+              <AccordionContent className="text-sm space-y-4 pt-4">
+                <div>
+                  <p className="font-semibold mb-2">Step 1: Get Your Badge Image</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>Copy the badge URL from the embed code above (the long URL between src=" and ")</li>
+                    <li>Open that URL in a new browser tab — the PNG badge will display</li>
+                    <li>Right-click the badge image and select <strong>"Save image as"</strong></li>
+                    <li>Save it to your computer (e.g., "mind-the-gap-badge.png")</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="font-semibold mb-2">Step 2: For Outlook Web / Microsoft 365</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>Click the <strong>Settings gear icon</strong> → <strong>View all Outlook settings</strong></li>
+                    <li>Go to <strong>Mail → Compose and reply → Email signature</strong></li>
+                    <li>Click <strong>"Insert pictures inline"</strong> button in signature editor</li>
+                    <li>Upload your saved PNG badge file</li>
+                    <li>Select the image, click the <strong>Link icon</strong>, and paste the dashboard URL from the embed code</li>
+                    <li>Click <strong>Save</strong></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="font-semibold mb-2">Step 3: For Outlook Desktop (Windows/Mac)</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>Go to <strong>File → Options → Mail → Signatures</strong></li>
+                    <li>Select your signature or create a new one</li>
+                    <li>Click the <strong>Insert Picture icon</strong> in the signature editor</li>
+                    <li>Browse and select your saved PNG badge file</li>
+                    <li>Highlight the image, click the <strong>Link button</strong>, paste dashboard URL from embed code</li>
+                    <li>Click <strong>OK</strong> to save</li>
+                  </ul>
+                </div>
+
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-xs text-muted-foreground">
+                    <strong>Size Recommendation:</strong> The badge is 500×120 pixels. If it appears too large, right-click and resize to 250×60 or 200×48 pixels for email signatures.
+                  </p>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="website" data-testid="accordion-website">
+              <AccordionTrigger className="text-lg font-semibold">
+                Website or Blog
+              </AccordionTrigger>
+              <AccordionContent className="text-sm space-y-4 pt-4">
+                <div>
+                  <p className="font-semibold mb-2">General HTML Websites</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>Copy the embed code using the button above</li>
+                    <li>Paste it directly into your HTML where you want the badge (footer, sidebar, etc.)</li>
+                    <li>The badge will automatically link to the dashboard when clicked</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="font-semibold mb-2">WordPress</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>Go to <strong>Appearance → Widgets</strong></li>
+                    <li>Add a <strong>Custom HTML</strong> widget to your footer or sidebar</li>
+                    <li>Paste the embed code and save</li>
+                    <li><em>Alternative:</em> Use the block editor and insert a "Custom HTML" block</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="font-semibold mb-2">Other Platforms (Squarespace, Wix, Shopify)</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>Look for "Embed Code" or "Custom HTML" blocks in your editor</li>
+                    <li>Paste the badge embed code</li>
+                    <li>Most platforms support standard HTML img and link tags</li>
+                  </ul>
+                </div>
+
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-xs text-muted-foreground">
+                    <strong>SVG or PNG?</strong> For websites, SVG provides better quality at any size and smaller file sizes. For email signatures, always use PNG format.
+                  </p>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="tips" data-testid="accordion-tips">
+              <AccordionTrigger className="text-lg font-semibold">
+                Best Practices & Tips
+              </AccordionTrigger>
+              <AccordionContent className="text-sm space-y-4 pt-4">
+                <div>
+                  <p className="font-semibold mb-2">Format Selection</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li><strong>PNG</strong> (Default): Best for email signatures — works in Gmail, Outlook, Apple Mail</li>
+                    <li><strong>SVG</strong>: Best for websites — scales perfectly, smaller file size, crisp on all displays</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="font-semibold mb-2">Size Guidelines</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>Default: 500×120 pixels (500px wide, 120px tall)</li>
+                    <li>Email signatures: Consider resizing to 250×60 or 200×48 for a more subtle appearance</li>
+                    <li>Website footer: Full size (500×120) or customize with CSS width property</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="font-semibold mb-2">Accessibility</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>The embed code includes descriptive alt text for screen readers</li>
+                    <li>The badge automatically updates with fresh data every 24 hours</li>
+                    <li>Clicking the badge takes visitors to the full dashboard with all statistics</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="font-semibold mb-2">Mobile Compatibility</p>
+                  <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                    <li>Badges display correctly on mobile email clients</li>
+                    <li>For responsive websites, consider adding CSS: <code className="bg-muted px-1 py-0.5 rounded">max-width: 100%; height: auto;</code></li>
+                  </ul>
+                </div>
+
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-xs text-muted-foreground">
+                    <strong>Data Updates:</strong> Your badge automatically fetches the latest statistics every 24 hours — no need to update the code!
+                  </p>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Card>
 
         <Card className="mt-8 p-8 bg-muted/30">
