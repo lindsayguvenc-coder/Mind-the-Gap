@@ -10,6 +10,22 @@
 - Scannable structure: Quick comprehension of multiple metrics simultaneously
 - Purposeful density: Information-rich without overwhelming
 
+## Color Palette
+
+**Brand Colors:**
+- Primary Blue: #5271bf (222°, 47%, 54%) - Main actions, primary buttons, links
+- Dark Gray: #434656 (231°, 12%, 30%) - Text, foreground elements
+- Light Gray: #a7aabc (231°, 14%, 70%) - Muted text, secondary elements
+- Destructive Red: #bb5161 (351°, 44%, 53%) - Error states, destructive actions
+- Accent Pink: #f78693 (353°, 87%, 75%) - Highlights, accent elements
+
+**Application:**
+- Backgrounds: Pure white (light mode), very dark gray #131419 (dark mode)
+- Cards: Off-white #fafafa (light mode), dark gray #1c1d24 (dark mode)
+- Borders: Subtle grays derived from light gray palette
+- Interactive elements: Primary blue for buttons, hover states use elevation system
+- Charts: Primary blue as base, with gradient variations for multi-series data
+
 ## Typography System
 
 **Font Stack:**
