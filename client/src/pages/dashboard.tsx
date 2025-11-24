@@ -350,7 +350,9 @@ export default function Dashboard() {
                 Mind the <span style={{ color: '#ff9686' }}>Gap</span>
               </h1>
               <p className="text-xl font-bold italic tracking-wide" data-testid="text-tagline">
-                Mind it. Measure it. Move it.
+                <span style={{ color: '#5271bf' }}>Mind it.</span>{' '}
+                <span style={{ color: '#b573c3' }}>Measure it.</span>{' '}
+                <span style={{ color: '#fa7aab' }}>Move it.</span>
               </p>
               <p className="text-lg text-muted-foreground">
                 Global & Local Women's Rights Statistics
