@@ -44,7 +44,7 @@ const statConfigs: Record<StatType, StatConfig> = {
   workforce: {
     title: 'Workforce Participation',
     icon: Briefcase,
-    color: '#ffc569',
+    color: '#ff9686',
     lightColor: '#fff8eb',
   },
 };
@@ -144,7 +144,7 @@ export default function BadgeSelector() {
       <div className="max-w-2xl mx-auto px-6 py-8 lg:px-8 lg:py-12">
         <header className="text-center mb-12">
           <h1 className="text-6xl font-bold mb-2 tracking-wide" data-testid="text-badge-selector-title">
-            Mind the <span style={{ color: '#ffc569' }}>Gap</span>
+            Mind the <span style={{ color: '#ff9686' }}>Gap</span>
           </h1>
           <p className="text-lg text-muted-foreground italic font-light tracking-wide mb-4" data-testid="text-tagline">
             Mind it. Measure it. Move it.

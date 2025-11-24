@@ -62,7 +62,7 @@ const statConfigs: Record<StatType, StatConfig> = {
   workforce: {
     title: 'Workforce Participation',
     icon: Briefcase,
-    color: '#ffc569',
+    color: '#ff9686',
     lightColor: '#fff8eb',
   },
 };
@@ -347,7 +347,7 @@ export default function Dashboard() {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>
               <h1 className="text-4xl font-bold mb-2 tracking-wide" data-testid="text-dashboard-title">
-                Mind the <span style={{ color: '#ffc569' }}>Gap</span>
+                Mind the <span style={{ color: '#ff9686' }}>Gap</span>
               </h1>
               <p className="text-lg text-muted-foreground italic font-light tracking-wide" data-testid="text-tagline">
                 Mind it. Measure it. Move it.

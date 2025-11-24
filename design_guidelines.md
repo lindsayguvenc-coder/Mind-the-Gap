@@ -17,7 +17,7 @@
 - Purple: #b573c3 - Leadership, authority
 - Pink: #fa7aab - Maternal health, care
 - Coral: #ff9686 - Healthcare, wellness
-- Orange: #ffc569 - Energy, activity
+- Salmon: #ff9686 - Energy, activity
 - Yellow: #f9f871 - Optimism, highlight (reserved for future use)
 
 **Statistic-Specific Colors:**
@@ -26,7 +26,7 @@ Each statistic has its own unique color for visual differentiation:
 - Leadership Representation: #b573c3 (Purple) - Power, leadership
 - Maternal Mortality Rate: #fa7aab (Pink) - Maternal care, compassion
 - Contraceptive Access: #ff9686 (Coral) - Health, wellness
-- Workforce Participation: #ffc569 (Orange) - Energy, productivity
+- Workforce Participation: #ff9686 (Salmon) - Energy, productivity
 
 **Application:**
 - Backgrounds: Pure white (light mode), very dark gray #131419 (dark mode)

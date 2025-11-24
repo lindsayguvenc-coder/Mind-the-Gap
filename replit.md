@@ -33,7 +33,7 @@ Preferred communication style: Simple, everyday language.
 - **CSS Framework**: Tailwind CSS with custom configuration
 - **Typography**: Inter for UI elements, JetBrains Mono for numerical data display
 - **Theme System**: HSL-based color variables for light/dark mode support
-- **Accent Color**: Orange (#ffc569 / 42 100% 71%) used for highlights, selections, and active states
+- **Accent Color**: Salmon (#ff9686) used for highlights, selections, and active states
 - **Layout Primitives**: Consistent spacing scale (2, 4, 6, 8, 12) from Tailwind units
 
 **State Management**
@@ -212,7 +212,7 @@ Preferred communication style: Simple, everyday language.
 - **Design Philosophy**: Minimal and elegant approach focused on typography and spacing over visual embellishment
 - **Site Name Styling**:
   - "Mind the Gap" displays with increased letter spacing (`tracking-wide`) for sophistication
-  - "Gap" highlighted in orange accent color (#ffc569) to create focal point and reinforce brand color
+  - "Gap" highlighted in salmon accent color (#ff9686) to create focal point and reinforce brand color
   - Consistent across all touchpoints: Dashboard, Badge Selector, email badges (SVG/PNG), social media share cards
 - **Tagline Typography**:
   - "Mind it. Measure it. Move it." rendered in italic with lighter font weight (300) and generous letter spacing

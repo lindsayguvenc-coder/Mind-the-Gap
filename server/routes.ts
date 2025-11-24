@@ -38,7 +38,7 @@ const statColors: Record<string, string> = {
   leadership: '#b573c3',
   maternal: '#fa7aab',
   healthcare: '#ff9686',
-  workforce: '#ffc569',
+  workforce: '#ff9686',
 };
 
 // Helper function to escape SVG text content to prevent injection
@@ -471,7 +471,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           <!-- Top branding with elegant styling -->
           <text x="60" y="80" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="rgba(255,255,255,0.9)" letter-spacing="0.05em">
-            MIND THE <tspan fill="#ffc569">GAP</tspan>
+            MIND THE <tspan fill="#ff9686">GAP</tspan>
           </text>
           <text x="60" y="108" font-family="Inter, sans-serif" font-size="16" font-weight="300" font-style="italic" fill="rgba(255,255,255,0.75)" letter-spacing="0.03em">Mind it. Measure it. Move it.</text>
           <text x="60" y="140" font-family="Inter, sans-serif" font-size="18" font-weight="400" fill="rgba(255,255,255,0.7)">Women's Rights &amp; Equality Statistics</text>
@@ -593,7 +593,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           <!-- Header with elegant brand styling -->
           <text x="20" y="20" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.05em">
-            MIND THE <tspan fill="#ffc569">GAP</tspan>
+            MIND THE <tspan fill="#ff9686">GAP</tspan>
           </text>
           <text x="20" y="32" font-family="Inter, sans-serif" font-size="8" font-weight="300" font-style="italic" fill="rgba(255,255,255,0.75)" letter-spacing="0.03em">Mind it. Measure it. Move it.</text>
           
@@ -718,7 +718,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           <!-- Header with elegant brand styling -->
           <text x="20" y="20" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.05em">
-            MIND THE <tspan fill="#ffc569">GAP</tspan>
+            MIND THE <tspan fill="#ff9686">GAP</tspan>
           </text>
           <text x="20" y="32" font-family="Inter, sans-serif" font-size="8" font-weight="300" font-style="italic" fill="rgba(255,255,255,0.75)" letter-spacing="0.03em">Mind it. Measure it. Move it.</text>
           
