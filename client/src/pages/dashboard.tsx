@@ -468,6 +468,21 @@ export default function Dashboard() {
                 Mind it. Measure it. Move it.
               </p>
             </Card>
+
+            <div className="mt-8 text-center pb-8">
+              <p className="text-sm text-muted-foreground">
+                Created by{' '}
+                <a 
+                  href="https://manif3stportfolio.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                  data-testid="link-portfolio"
+                >
+                  manif3stportfolio.com
+                </a>
+              </p>
+            </div>
           </>
         ) : null}
       </div>
