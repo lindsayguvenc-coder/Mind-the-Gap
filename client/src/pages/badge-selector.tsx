@@ -230,16 +230,17 @@ export default function BadgeSelector() {
             </div>
             
             <div 
-              className={`p-6 rounded-lg bg-primary ${isLoading || isFetching ? 'opacity-50' : ''}`}
+              className={`p-6 rounded-lg ${isLoading || isFetching ? 'opacity-50' : ''}`}
+              style={{ backgroundColor: currentStatConfig.color }}
               data-testid="badge-preview"
             >
               <div className="flex items-center gap-4">
-                <Icon className="w-8 h-8 text-primary-foreground" />
+                <Icon className="w-8 h-8 text-white" />
                 <div className="flex-1">
-                  <div className="text-primary-foreground/90 text-sm font-semibold mb-1">MIND THE GAP</div>
-                  <div className="text-primary-foreground font-bold text-lg">{currentData.detail}</div>
+                  <div className="text-white/90 text-sm font-semibold mb-1">MIND THE GAP</div>
+                  <div className="text-white font-bold text-lg">{currentData.detail}</div>
                 </div>
-                <div className="text-4xl font-bold font-mono text-primary-foreground" data-testid="badge-value">
+                <div className="text-4xl font-bold font-mono text-white" data-testid="badge-value">
                   {currentData.value}
                 </div>
               </div>
