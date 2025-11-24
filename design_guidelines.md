@@ -13,19 +13,20 @@
 ## Color Palette
 
 **Brand Colors:**
-- Primary Blue: #5271bf (222°, 47%, 54%) - Main actions, primary buttons, links
-- Dark Gray: #434656 (231°, 12%, 30%) - Text, foreground elements
-- Light Gray: #a7aabc (231°, 14%, 70%) - Muted text, secondary elements
-- Destructive Red: #bb5161 (351°, 44%, 53%) - Error states, destructive actions
-- Accent Pink: #f78693 (353°, 87%, 75%) - Highlights, accent elements
+- Primary Blue: #5271bf - Main actions, primary buttons, links
+- Purple: #b573c3 - Leadership, authority
+- Pink: #fa7aab - Maternal health, care
+- Coral: #ff9686 - Healthcare, wellness
+- Orange: #ffc569 - Energy, activity
+- Yellow: #f9f871 - Optimism, highlight (reserved for future use)
 
 **Statistic-Specific Colors:**
 Each statistic has its own unique color for visual differentiation:
-- Gender Pay Gap: #5271bf (Primary Blue) - Professional, authoritative
-- Leadership Representation: #f78693 (Accent Pink) - Vibrant, forward-thinking
-- Maternal Mortality Rate: #bb5161 (Destructive Red) - Urgent, critical
-- Contraceptive Access: #8b9dc3 (Soft Blue) - Healthcare, supportive
-- Workforce Participation: #a7aabc (Light Gray) - Steady, structural
+- Gender Pay Gap: #5271bf (Blue) - Professional, authoritative
+- Leadership Representation: #b573c3 (Purple) - Power, leadership
+- Maternal Mortality Rate: #fa7aab (Pink) - Maternal care, compassion
+- Contraceptive Access: #ff9686 (Coral) - Health, wellness
+- Workforce Participation: #ffc569 (Orange) - Energy, productivity
 
 **Application:**
 - Backgrounds: Pure white (light mode), very dark gray #131419 (dark mode)

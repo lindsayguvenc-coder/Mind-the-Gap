@@ -44,26 +44,26 @@ const statConfigs: Record<StatType, StatConfig> = {
   leadership: {
     title: 'Leadership Representation',
     icon: Users,
-    color: '#f78693',
-    lightColor: '#fef0f2',
+    color: '#b573c3',
+    lightColor: '#f5eef7',
   },
   maternal: {
     title: 'Maternal Mortality Rate',
     icon: Heart,
-    color: '#bb5161',
-    lightColor: '#f7e8ea',
+    color: '#fa7aab',
+    lightColor: '#fef0f5',
   },
   healthcare: {
     title: 'Contraceptive Access',
     icon: AlertCircle,
-    color: '#8b9dc3',
-    lightColor: '#eff2f8',
+    color: '#ff9686',
+    lightColor: '#fff3f1',
   },
   workforce: {
     title: 'Workforce Participation',
     icon: Briefcase,
-    color: '#a7aabc',
-    lightColor: '#f2f3f5',
+    color: '#ffc569',
+    lightColor: '#fff8eb',
   },
 };
 

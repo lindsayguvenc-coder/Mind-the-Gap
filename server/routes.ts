@@ -44,10 +44,10 @@ const validStats = ['paygap', 'leadership', 'maternal', 'healthcare', 'workforce
 // Stat-specific colors
 const statColors: Record<string, string> = {
   paygap: '#5271bf',
-  leadership: '#f78693',
-  maternal: '#bb5161',
-  healthcare: '#8b9dc3',
-  workforce: '#a7aabc',
+  leadership: '#b573c3',
+  maternal: '#fa7aab',
+  healthcare: '#ff9686',
+  workforce: '#ffc569',
 };
 
 // Helper function to escape SVG text content to prevent injection
