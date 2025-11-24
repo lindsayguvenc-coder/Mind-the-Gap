@@ -455,6 +455,19 @@ export default function Dashboard() {
                 Data sourced from World Bank, WHO, ILO, and UN agencies. Statistics represent the most recent available data.
               </p>
             </Card>
+
+            <Card className="mt-8 p-8 bg-muted/30">
+              <h2 className="text-xl font-bold mb-4">Our Mission</h2>
+              <p className="text-muted-foreground mb-4">
+                Mind the Gap exists to make women's issues impossible to ignore.
+              </p>
+              <p className="text-muted-foreground mb-4">
+                We believe that progress requires measurement, and measurement requires visibility. By transforming critical statistics into shareable badges, we empower individuals and organizations to keep gender inequality in focus—in email signatures, on websites, in social media, and everywhere voices are heard.
+              </p>
+              <p className="text-muted-foreground italic font-medium">
+                Mind it. Measure it. Move it.
+              </p>
+            </Card>
           </>
         ) : null}
       </div>

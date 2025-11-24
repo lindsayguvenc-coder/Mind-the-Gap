@@ -350,6 +350,19 @@ export default function BadgeSelector() {
           </div>
         </Card>
 
+        <Card className="mt-8 p-8 bg-muted/30">
+          <h2 className="text-xl font-bold mb-4">Our Mission</h2>
+          <p className="text-muted-foreground mb-4">
+            Mind the Gap exists to make women's issues impossible to ignore.
+          </p>
+          <p className="text-muted-foreground mb-4">
+            We believe that progress requires measurement, and measurement requires visibility. By transforming critical statistics into shareable badges, we empower individuals and organizations to keep gender inequality in focus—in email signatures, on websites, in social media, and everywhere voices are heard.
+          </p>
+          <p className="text-muted-foreground italic font-medium">
+            Mind it. Measure it. Move it.
+          </p>
+        </Card>
+
         <div className="mt-8 text-center">
           <p className="text-sm text-muted-foreground">
             Statistics update automatically every 24 hours with fresh data from official sources.
