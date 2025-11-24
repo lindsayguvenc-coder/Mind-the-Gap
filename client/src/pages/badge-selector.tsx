@@ -248,25 +248,29 @@ export default function BadgeSelector() {
             </div>
             
             <div 
-              className={`p-6 rounded-lg ${isLoading || isFetching ? 'opacity-50' : ''}`}
-              style={{ backgroundColor: currentStatConfig.color }}
+              className={`rounded-lg overflow-hidden ${isLoading || isFetching ? 'opacity-50' : ''}`}
               data-testid="badge-preview"
             >
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 mb-2">
-                  <Icon className="w-6 h-6 text-white" />
-                  <div className="text-white/90 text-sm font-semibold">MIND THE GAP</div>
+              {/* Colored top section - matches actual badge */}
+              <div 
+                className="p-5 pb-6"
+                style={{ backgroundColor: currentStatConfig.color }}
+              >
+                {/* Header with branding */}
+                <div className="text-white/90 text-xs font-semibold tracking-widest mb-4">
+                  MIND THE <span style={{ color: '#ff9686' }}>GAP</span>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white/10 rounded-lg p-3">
+                {/* Two-column comparison */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="bg-white/15 rounded p-3">
                     <div className="text-white/80 text-xs font-semibold mb-1">GLOBAL</div>
                     <div className="text-white font-bold text-2xl font-mono" data-testid="badge-value-global">
                       {globalData.value}
                     </div>
                   </div>
                   
-                  <div className="bg-white/10 rounded-lg p-3">
+                  <div className="bg-white/15 rounded p-3">
                     <div className="text-white/80 text-xs font-semibold mb-1 uppercase">{countryLabels[selectedCountry]}</div>
                     <div className="text-white font-bold text-2xl font-mono" data-testid="badge-value-local">
                       {localData.value}
@@ -274,8 +278,21 @@ export default function BadgeSelector() {
                   </div>
                 </div>
                 
-                <div className="text-white/90 text-sm font-medium">
-                  {currentStatConfig.title}
+                {/* Statistic title and source */}
+                <div className="space-y-1">
+                  <div className="text-white/90 text-sm font-medium">
+                    {currentStatConfig.title}
+                  </div>
+                  <div className="text-white/60 text-xs">
+                    Source: World Bank
+                  </div>
+                </div>
+              </div>
+
+              {/* White background section with tagline */}
+              <div className="bg-white py-2 text-center">
+                <div className="text-black text-xs font-bold italic tracking-wide">
+                  Mind it. Measure it. Move it.
                 </div>
               </div>
             </div>
