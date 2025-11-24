@@ -349,7 +349,7 @@ export default function Dashboard() {
               <h1 className="text-4xl font-bold mb-2 tracking-wide" data-testid="text-dashboard-title">
                 Mind the <span style={{ color: '#ff9686' }}>Gap</span>
               </h1>
-              <p className="text-lg text-muted-foreground italic font-light tracking-wide" data-testid="text-tagline">
+              <p className="text-xl font-bold italic tracking-wide" data-testid="text-tagline">
                 Mind it. Measure it. Move it.
               </p>
               <p className="text-lg text-muted-foreground">

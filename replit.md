@@ -215,8 +215,8 @@ Preferred communication style: Simple, everyday language.
   - "Gap" highlighted in salmon accent color (#ff9686) to create focal point and reinforce brand color
   - Consistent across all touchpoints: Dashboard, Badge Selector, email badges (SVG/PNG), social media share cards
 - **Tagline Typography**:
-  - "Mind it. Measure it. Move it." rendered in italic with lighter font weight (300) and generous letter spacing
-  - Subtle opacity (75%) creates visual hierarchy without competing with primary content
+  - "Mind it. Measure it. Move it." rendered in bold italic with generous letter spacing
+  - Sized smaller than site name but larger than body text for visual hierarchy
   - Maintains elegant, refined appearance across all contexts
 - **Implementation Details**:
   - Frontend: React components use inline styles for orange accent on "Gap" with CSS classes for letter spacing
