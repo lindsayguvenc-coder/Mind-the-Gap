@@ -41,6 +41,15 @@ const countryCodeMap: Record<string, string> = {
 // Valid stat types for whitelist validation
 const validStats = ['paygap', 'leadership', 'maternal', 'healthcare', 'workforce'] as const;
 
+// Stat-specific colors
+const statColors: Record<string, string> = {
+  paygap: '#5271bf',
+  leadership: '#f78693',
+  maternal: '#bb5161',
+  healthcare: '#8b9dc3',
+  workforce: '#a7aabc',
+};
+
 // Helper function to escape SVG text content to prevent injection
 function escapeSvgText(text: string): string {
   return text
@@ -469,17 +478,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const statTitle = statTitles[stat] || 'Statistic';
       const locationName = getLocationName(countryCodeMap[location] || 'WLD');
+      
+      // Get stat-specific color
+      const statColor = statColors[stat] || '#5271bf';
 
       // Generate shareable SVG card (larger than badge for social media)
       const svg = `
         <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:hsl(222 47% 27%);stop-opacity:1" />
-              <stop offset="100%" style="stop-color:hsl(222 47% 15%);stop-opacity:1" />
-            </linearGradient>
-          </defs>
-          <rect width="1200" height="630" fill="url(#grad)"/>
+          <rect width="1200" height="630" fill="${statColor}"/>
           
           <!-- Top branding -->
           <text x="60" y="80" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
@@ -571,17 +577,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Sanitize values to prevent SVG injection
       const statValue = escapeSvgText(data.value);
       const statDetail = escapeSvgText(data.detail);
+      
+      // Get stat-specific color
+      const statColor = statColors[stat] || '#5271bf';
 
       // Generate SVG badge
       const svg = `
         <svg width="500" height="80" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:hsl(222 47% 27%);stop-opacity:1" />
-              <stop offset="100%" style="stop-color:hsl(222 47% 22%);stop-opacity:1" />
-            </linearGradient>
-          </defs>
-          <rect width="500" height="80" fill="url(#grad)" rx="6"/>
+          <rect width="500" height="80" fill="${statColor}" rx="6"/>
           <text x="20" y="30" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
           <text x="20" y="55" font-family="Inter, sans-serif" font-size="16" font-weight="700" fill="white">${statDetail}</text>
           <text x="450" y="55" font-family="JetBrains Mono, monospace" font-size="32" font-weight="700" fill="white" text-anchor="end">${statValue}</text>
@@ -660,17 +663,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Sanitize values to prevent SVG injection
       const statValue = escapeSvgText(data.value);
       const statDetail = escapeSvgText(data.detail);
+      
+      // Get stat-specific color
+      const statColor = statColors[stat] || '#5271bf';
 
       // Generate SVG badge (same as SVG endpoint)
       const svg = `
         <svg width="500" height="80" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:hsl(222 47% 27%);stop-opacity:1" />
-              <stop offset="100%" style="stop-color:hsl(222 47% 22%);stop-opacity:1" />
-            </linearGradient>
-          </defs>
-          <rect width="500" height="80" fill="url(#grad)" rx="6"/>
+          <rect width="500" height="80" fill="${statColor}" rx="6"/>
           <text x="20" y="30" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
           <text x="20" y="55" font-family="Inter, sans-serif" font-size="16" font-weight="700" fill="white">${statDetail}</text>
           <text x="450" y="55" font-family="JetBrains Mono, monospace" font-size="32" font-weight="700" fill="white" text-anchor="end">${statValue}</text>

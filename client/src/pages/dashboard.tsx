@@ -30,28 +30,40 @@ interface TrendResponse {
 interface StatConfig {
   title: string;
   icon: LucideIcon;
+  color: string;
+  lightColor: string;
 }
 
 const statConfigs: Record<StatType, StatConfig> = {
   paygap: {
     title: 'Gender Pay Gap',
     icon: TrendingDown,
+    color: '#5271bf',
+    lightColor: '#e8ecf7',
   },
   leadership: {
     title: 'Leadership Representation',
     icon: Users,
+    color: '#f78693',
+    lightColor: '#fef0f2',
   },
   maternal: {
     title: 'Maternal Mortality Rate',
     icon: Heart,
+    color: '#bb5161',
+    lightColor: '#f7e8ea',
   },
   healthcare: {
     title: 'Contraceptive Access',
     icon: AlertCircle,
+    color: '#8b9dc3',
+    lightColor: '#eff2f8',
   },
   workforce: {
     title: 'Workforce Participation',
     icon: Briefcase,
+    color: '#a7aabc',
+    lightColor: '#f2f3f5',
   },
 };
 
@@ -132,8 +144,8 @@ function StatCard({ statKey, config, data, Icon, selectedCountry, isExpanded, on
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-primary rounded-lg">
-              <Icon className="w-6 h-6 text-primary-foreground" />
+            <div className="p-3 rounded-lg" style={{ backgroundColor: config.color }}>
+              <Icon className="w-6 h-6 text-white" />
             </div>
             <h3 className="text-lg font-semibold">{config.title}</h3>
           </div>
@@ -204,9 +216,9 @@ function StatCard({ statKey, config, data, Icon, selectedCountry, isExpanded, on
                 <Line 
                   type="monotone" 
                   dataKey="value" 
-                  stroke="hsl(var(--primary))" 
+                  stroke={config.color} 
                   strokeWidth={2}
-                  dot={{ fill: 'hsl(var(--primary))' }}
+                  dot={{ fill: config.color }}
                 />
               </LineChart>
             </ResponsiveContainer>

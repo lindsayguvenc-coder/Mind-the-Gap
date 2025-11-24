@@ -19,12 +19,21 @@
 - Destructive Red: #bb5161 (351°, 44%, 53%) - Error states, destructive actions
 - Accent Pink: #f78693 (353°, 87%, 75%) - Highlights, accent elements
 
+**Statistic-Specific Colors:**
+Each statistic has its own unique color for visual differentiation:
+- Gender Pay Gap: #5271bf (Primary Blue) - Professional, authoritative
+- Leadership Representation: #f78693 (Accent Pink) - Vibrant, forward-thinking
+- Maternal Mortality Rate: #bb5161 (Destructive Red) - Urgent, critical
+- Contraceptive Access: #8b9dc3 (Soft Blue) - Healthcare, supportive
+- Workforce Participation: #a7aabc (Light Gray) - Steady, structural
+
 **Application:**
 - Backgrounds: Pure white (light mode), very dark gray #131419 (dark mode)
 - Cards: Off-white #fafafa (light mode), dark gray #1c1d24 (dark mode)
 - Borders: Subtle grays derived from light gray palette
 - Interactive elements: Primary blue for buttons, hover states use elevation system
-- Charts: Primary blue as base, with gradient variations for multi-series data
+- Charts: Each statistic uses its specific color for line charts and icon backgrounds
+- Badges & Share Cards: Background color matches the statistic being displayed
 
 ## Typography System
 
