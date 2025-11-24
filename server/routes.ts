@@ -471,7 +471,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           <!-- Top branding -->
           <text x="60" y="80" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
-          <text x="60" y="115" font-family="Inter, sans-serif" font-size="18" font-weight="400" fill="rgba(255,255,255,0.7)">Women's Rights &amp; Equality Statistics</text>
+          <text x="60" y="108" font-family="Inter, sans-serif" font-size="16" font-weight="400" font-style="italic" fill="rgba(255,255,255,0.75)">Mind it. Measure it. Move it.</text>
+          <text x="60" y="140" font-family="Inter, sans-serif" font-size="18" font-weight="400" fill="rgba(255,255,255,0.7)">Women's Rights &amp; Equality Statistics</text>
           
           <!-- Main content -->
           <text x="60" y="220" font-family="Inter, sans-serif" font-size="32" font-weight="600" fill="rgba(255,255,255,0.9)">${statTitle}</text>
@@ -589,7 +590,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           <rect width="500" height="120" fill="${statColor}" rx="6"/>
           
           <!-- Header -->
-          <text x="20" y="25" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
+          <text x="20" y="20" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
+          <text x="20" y="32" font-family="Inter, sans-serif" font-size="8" font-weight="400" font-style="italic" fill="rgba(255,255,255,0.75)">Mind it. Measure it. Move it.</text>
           
           <!-- Two-column comparison -->
           <rect x="20" y="35" width="220" height="60" fill="rgba(255,255,255,0.15)" rx="4"/>
@@ -710,7 +712,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           <rect width="500" height="120" fill="${statColor}" rx="6"/>
           
           <!-- Header -->
-          <text x="20" y="25" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
+          <text x="20" y="20" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.9)">MIND THE GAP</text>
+          <text x="20" y="32" font-family="Inter, sans-serif" font-size="8" font-weight="400" font-style="italic" fill="rgba(255,255,255,0.75)">Mind it. Measure it. Move it.</text>
           
           <!-- Two-column comparison -->
           <rect x="20" y="35" width="220" height="60" fill="rgba(255,255,255,0.15)" rx="4"/>
