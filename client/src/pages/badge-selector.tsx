@@ -365,8 +365,10 @@ export default function BadgeSelector() {
           <p className="text-muted-foreground mb-4">
             We believe that progress requires measurement, and measurement requires visibility. By transforming critical statistics into shareable badges, we empower individuals and organizations to keep gender inequality in focus—in email signatures, on websites, in social media, and everywhere voices are heard.
           </p>
-          <p className="text-muted-foreground italic font-medium">
-            Mind it. Measure it. Move it.
+          <p className="italic font-medium">
+            <span style={{ color: '#5271bf' }}>Mind it.</span>{' '}
+            <span style={{ color: '#b573c3' }}>Measure it.</span>{' '}
+            <span style={{ color: '#fa7aab' }}>Move it.</span>
           </p>
         </Card>
 
