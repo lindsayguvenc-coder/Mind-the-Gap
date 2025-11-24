@@ -26,16 +26,7 @@ const countryCodeMap: Record<string, string> = {
   'us': 'USA',
   'uk': 'GBR',
   'canada': 'CAN',
-  'france': 'FRA',
-  'germany': 'DEU',
-  'japan': 'JPN',
-  'australia': 'AUS',
-  'india': 'IND',
-  'brazil': 'BRA',
-  'mexico': 'MEX',
-  'south-africa': 'ZAF',
-  'sweden': 'SWE',
-  'norway': 'NOR'
+  'mexico': 'MEX'
 };
 
 // Valid stat types for whitelist validation
@@ -61,20 +52,11 @@ function escapeSvgText(text: string): string {
 }
 
 const locationNames: Record<string, string> = {
-  'WLD': 'global',
-  'USA': 'US',
-  'GBR': 'UK',
+  'WLD': 'Global',
+  'USA': 'United States',
+  'GBR': 'United Kingdom',
   'CAN': 'Canada',
-  'FRA': 'France',
-  'DEU': 'Germany',
-  'JPN': 'Japan',
-  'AUS': 'Australia',
-  'IND': 'India',
-  'BRA': 'Brazil',
-  'MEX': 'Mexico',
-  'ZAF': 'South Africa',
-  'SWE': 'Sweden',
-  'NOR': 'Norway'
+  'MEX': 'Mexico'
 };
 
 function getLocationName(code: string): string {

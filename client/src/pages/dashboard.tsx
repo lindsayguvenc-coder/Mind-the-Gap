@@ -72,16 +72,7 @@ const countryLabels: Record<CountryCode, string> = {
   us: 'United States',
   uk: 'United Kingdom',
   canada: 'Canada',
-  france: 'France',
-  germany: 'Germany',
-  japan: 'Japan',
-  australia: 'Australia',
-  india: 'India',
-  brazil: 'Brazil',
   mexico: 'Mexico',
-  'south-africa': 'South Africa',
-  sweden: 'Sweden',
-  norway: 'Norway',
 };
 
 interface StatCardProps {

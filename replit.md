@@ -2,7 +2,7 @@
 
 ## Overview
 
-Mind the Gap is a comprehensive data visualization dashboard application that displays real-time gender equality statistics from the World Bank API. The application presents five key metrics: gender pay gap, leadership representation, maternal mortality rate, contraceptive access, and workforce participation across 14 countries (Global, US, UK, Canada, France, Germany, Japan, Australia, India, Brazil, Mexico, South Africa, Sweden, Norway). 
+Mind the Gap is a comprehensive data visualization dashboard application that displays real-time gender equality statistics from the World Bank API. The application presents five key metrics: gender pay gap, leadership representation, maternal mortality rate, contraceptive access, and workforce participation across 5 locations (Global, United States, United Kingdom, Canada, and Mexico). 
 
 Users can:
 - View all statistics in an interactive dashboard with expandable historical trend charts (2015-2024)
@@ -133,11 +133,11 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Updates (November 2025)
 
-### Expanded Country Coverage
-- **Countries Added**: France, Germany, Japan, Australia, India, Brazil, Mexico, South Africa, Sweden, Norway
-- **Total Coverage**: 14 countries (from 4 to 14)
-- **Implementation**: Updated TypeScript types, backend country code mappings, and frontend selectors
-- **Data Source**: All countries fetch real-time data from World Bank API with country-specific fallbacks
+### Location Coverage
+- **Supported Locations**: Global, United States, United Kingdom, Canada, Mexico
+- **Total Coverage**: 5 locations with comprehensive World Bank API data
+- **Implementation**: TypeScript types, backend country code mappings, and frontend selectors
+- **Data Source**: All locations fetch real-time data from World Bank API with location-specific fallbacks
 
 ### Historical Trend Analysis
 - **Feature**: Interactive expandable trend charts on each statistic card

@@ -36,6 +36,14 @@ Each statistic has its own unique color for visual differentiation:
 - Charts: Each statistic uses its specific color for line charts and icon backgrounds
 - Badges & Share Cards: Background color matches the statistic being displayed
 
+**Supported Locations:**
+The application supports 5 geographic locations:
+- Global (worldwide aggregate data)
+- United States
+- United Kingdom
+- Canada
+- Mexico
+
 ## Typography System
 
 **Font Stack:**
