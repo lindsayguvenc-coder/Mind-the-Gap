@@ -347,6 +347,7 @@ export default function Dashboard() {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>
               <h1 className="text-4xl font-bold mb-2" data-testid="text-dashboard-title">Mind the Gap</h1>
+              <p className="text-lg text-muted-foreground italic" data-testid="text-tagline">Mind it. Measure it. Move it.</p>
               <p className="text-lg text-muted-foreground">
                 Global & Local Women's Rights Statistics
               </p>
