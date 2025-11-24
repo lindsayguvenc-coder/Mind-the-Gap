@@ -13,16 +13,15 @@
 ## Color Palette
 
 **Brand Colors:**
-- Primary Blue: #5271bf - Main actions, primary buttons, links
+- Yellow: #f9f871 - Gender pay gap, attention, highlight
 - Purple: #b573c3 - Leadership, authority
 - Pink: #fa7aab - Maternal health, care
-- Coral: #ff9686 - Healthcare, wellness
+- Orange: #ffc569 - Healthcare, wellness
 - Salmon: #ff9686 - Energy, activity
-- Yellow: #f9f871 - Optimism, highlight (reserved for future use)
 
 **Statistic-Specific Colors:**
 Each statistic has its own unique color for visual differentiation:
-- Gender Pay Gap: #5271bf (Blue) - Professional, authoritative
+- Gender Pay Gap: #f9f871 (Yellow) - Attention, urgency, highlight
 - Leadership Representation: #b573c3 (Purple) - Power, leadership
 - Maternal Mortality Rate: #fa7aab (Pink) - Maternal care, compassion
 - Contraceptive Access: #ffc569 (Orange) - Health, wellness
@@ -32,7 +31,7 @@ Each statistic has its own unique color for visual differentiation:
 - Backgrounds: Pure white (light mode), very dark gray #131419 (dark mode)
 - Cards: Off-white #fafafa (light mode), dark gray #1c1d24 (dark mode)
 - Borders: Subtle grays derived from light gray palette
-- Interactive elements: Primary blue for buttons, hover states use elevation system
+- Interactive elements: Buttons use elevation system for hover states
 - Charts: Each statistic uses its specific color for line charts and icon backgrounds
 - Badges & Share Cards: Background color matches the statistic being displayed
 
