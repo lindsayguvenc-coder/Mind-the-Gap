@@ -590,15 +590,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Generate SVG badge with comparison
       const svg = `
-        <svg width="500" height="120" xmlns="http://www.w3.org/2000/svg">
+        <svg width="500" height="150" xmlns="http://www.w3.org/2000/svg">
+          <!-- Main colored background with rounded top -->
           <rect width="500" height="120" fill="${statColor}" rx="6"/>
+          <!-- White background space at bottom with rounded bottom -->
+          <rect y="120" width="500" height="30" fill="white" rx="6"/>
+          <!-- Cover the gap between the two rects -->
+          <rect y="114" width="500" height="12" fill="${statColor}"/>
+          <rect y="120" width="500" height="6" fill="white"/>
           
           <!-- Header with elegant brand styling -->
           <text x="20" y="20" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.05em">
             MIND THE <tspan fill="#ff9686">GAP</tspan>
-          </text>
-          <text x="20" y="32" font-family="Inter, sans-serif" font-size="8" font-weight="700" font-style="italic" letter-spacing="0.03em">
-            <tspan fill="#5271bf">Mind it.</tspan> <tspan fill="#b573c3">Measure it.</tspan> <tspan fill="#fa7aab">Move it.</tspan>
           </text>
           
           <!-- Two-column comparison -->
@@ -613,9 +616,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           <text x="370" y="52" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.8)" text-anchor="middle">${escapeSvgText(location2Name.toUpperCase())}</text>
           <text x="370" y="78" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="white" text-anchor="middle">${value2}</text>
           
-          <!-- Footer -->
+          <!-- Statistic title and source in colored area -->
           <text x="20" y="104" font-family="Inter, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.9)">${escapeSvgText(statTitle)}</text>
           <text x="20" y="115" font-family="Inter, sans-serif" font-size="7" font-weight="400" fill="rgba(255,255,255,0.6)">Source: World Bank</text>
+          
+          <!-- Tagline in white space with three-color scheme -->
+          <text x="250" y="140" font-family="Inter, sans-serif" font-size="10" font-weight="700" font-style="italic" text-anchor="middle" letter-spacing="0.03em">
+            <tspan fill="#5271bf">Mind it.</tspan> <tspan fill="#b573c3">Measure it.</tspan> <tspan fill="#fa7aab">Move it.</tspan>
+          </text>
         </svg>
       `;
 
@@ -717,15 +725,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Generate SVG badge with comparison (same as SVG endpoint)
       const svg = `
-        <svg width="500" height="120" xmlns="http://www.w3.org/2000/svg">
+        <svg width="500" height="150" xmlns="http://www.w3.org/2000/svg">
+          <!-- Main colored background with rounded top -->
           <rect width="500" height="120" fill="${statColor}" rx="6"/>
+          <!-- White background space at bottom with rounded bottom -->
+          <rect y="120" width="500" height="30" fill="white" rx="6"/>
+          <!-- Cover the gap between the two rects -->
+          <rect y="114" width="500" height="12" fill="${statColor}"/>
+          <rect y="120" width="500" height="6" fill="white"/>
           
           <!-- Header with elegant brand styling -->
           <text x="20" y="20" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.05em">
             MIND THE <tspan fill="#ff9686">GAP</tspan>
-          </text>
-          <text x="20" y="32" font-family="Inter, sans-serif" font-size="8" font-weight="700" font-style="italic" letter-spacing="0.03em">
-            <tspan fill="#5271bf">Mind it.</tspan> <tspan fill="#b573c3">Measure it.</tspan> <tspan fill="#fa7aab">Move it.</tspan>
           </text>
           
           <!-- Two-column comparison -->
@@ -740,9 +751,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           <text x="370" y="52" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.8)" text-anchor="middle">${escapeSvgText(location2Name.toUpperCase())}</text>
           <text x="370" y="78" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="white" text-anchor="middle">${value2}</text>
           
-          <!-- Footer -->
+          <!-- Statistic title and source in colored area -->
           <text x="20" y="104" font-family="Inter, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.9)">${escapeSvgText(statTitle)}</text>
           <text x="20" y="115" font-family="Inter, sans-serif" font-size="7" font-weight="400" fill="rgba(255,255,255,0.6)">Source: World Bank</text>
+          
+          <!-- Tagline in white space with three-color scheme -->
+          <text x="250" y="140" font-family="Inter, sans-serif" font-size="10" font-weight="700" font-style="italic" text-anchor="middle" letter-spacing="0.03em">
+            <tspan fill="#5271bf">Mind it.</tspan> <tspan fill="#b573c3">Measure it.</tspan> <tspan fill="#fa7aab">Move it.</tspan>
+          </text>
         </svg>
       `;
 

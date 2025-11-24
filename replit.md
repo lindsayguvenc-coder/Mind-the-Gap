@@ -6,6 +6,22 @@ Mind the Gap is a data visualization dashboard displaying real-time gender equal
 ## User Preferences
 Preferred communication style: Simple, everyday language.
 
+## Design Decisions
+
+### Badge Design
+- **Size**: 500x150 pixels (SVG and PNG formats)
+- **Layout**: Colored top section (120px) + white background bottom section (30px)
+- **Tagline Placement**: "Mind it. Measure it. Move it." centered in white background space using three-color scheme:
+  - "Mind it." in blue (#5271bf)
+  - "Measure it." in purple (#b573c3)
+  - "Move it." in pink (#fa7aab)
+- **Color Scheme**: Each statistic has a unique color:
+  - Gender Pay Gap: #6e6cbf (purple-blue)
+  - Leadership: #b573c3 (purple)
+  - Maternal: #fa7aab (pink)
+  - Healthcare: #ffc569 (orange)
+  - Workforce: #ff9686 (salmon)
+
 ## System Architecture
 
 ### Frontend Architecture

@@ -456,7 +456,7 @@ export default function BadgeSelector() {
 
                 <div className="p-3 bg-muted/50 rounded-lg">
                   <p className="text-xs text-muted-foreground">
-                    <strong>Size Recommendation:</strong> The badge is 500x120 pixels. If it appears too large, right-click and resize to 250x60 or 200x48 pixels for email signatures.
+                    <strong>Size Recommendation:</strong> The badge is 500x150 pixels. If it appears too large, right-click and resize to 250x75 or 200x60 pixels for email signatures.
                   </p>
                 </div>
               </AccordionContent>
@@ -519,9 +519,9 @@ export default function BadgeSelector() {
                 <div>
                   <p className="font-semibold mb-2">Size Guidelines</p>
                   <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-                    <li>Default: 500x120 pixels (500px wide, 120px tall)</li>
-                    <li>Email signatures: Consider resizing to 250x60 or 200x48 for a more subtle appearance</li>
-                    <li>Website footer: Full size (500x120) or customize with CSS width property</li>
+                    <li>Default: 500x150 pixels (500px wide, 150px tall)</li>
+                    <li>Email signatures: Consider resizing to 250x75 or 200x60 for a more subtle appearance</li>
+                    <li>Website footer: Full size (500x150) or customize with CSS width property</li>
                   </ul>
                 </div>
 
