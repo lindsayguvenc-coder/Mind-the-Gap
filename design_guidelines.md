@@ -25,7 +25,7 @@ Each statistic has its own unique color for visual differentiation:
 - Gender Pay Gap: #5271bf (Blue) - Professional, authoritative
 - Leadership Representation: #b573c3 (Purple) - Power, leadership
 - Maternal Mortality Rate: #fa7aab (Pink) - Maternal care, compassion
-- Contraceptive Access: #ff9686 (Coral) - Health, wellness
+- Contraceptive Access: #ffc569 (Orange) - Health, wellness
 - Workforce Participation: #ff9686 (Salmon) - Energy, productivity
 
 **Application:**

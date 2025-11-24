@@ -37,7 +37,7 @@ const statColors: Record<string, string> = {
   paygap: '#5271bf',
   leadership: '#b573c3',
   maternal: '#fa7aab',
-  healthcare: '#ff9686',
+  healthcare: '#ffc569',
   workforce: '#ff9686',
 };
 

@@ -56,8 +56,8 @@ const statConfigs: Record<StatType, StatConfig> = {
   healthcare: {
     title: 'Contraceptive Access',
     icon: AlertCircle,
-    color: '#ff9686',
-    lightColor: '#fff3f1',
+    color: '#ffc569',
+    lightColor: '#fff8eb',
   },
   workforce: {
     title: 'Workforce Participation',
