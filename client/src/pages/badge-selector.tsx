@@ -101,9 +101,9 @@ export default function BadgeSelector() {
   const generateEmbedCode = () => {
     const endpoint = badgeFormat === 'png' ? 'badge-png' : 'badge';
     const badgeUrl = `${window.location.origin}/api/${endpoint}/${selectedStat}/global/${selectedCountry}`;
-    const dashboardUrl = `${window.location.origin}/dashboard`;
-    const titleText = `${currentStatConfig.title}: Global vs ${countryLabels[selectedCountry]} - Data from World Bank API, updates daily. Click to view Mind the Gap dashboard.`;
-    return `<a href="${dashboardUrl}" style="text-decoration:none;"><img src="${badgeUrl}" alt="Mind the Gap - ${currentStatConfig.title}" title="${titleText}" /></a>`;
+    const homepageUrl = `${window.location.origin}/`;
+    const titleText = `${currentStatConfig.title}: Global vs ${countryLabels[selectedCountry]} - Data from World Bank API, updates daily. Click to visit Mind the Gap.`;
+    return `<a href="${homepageUrl}" style="text-decoration:none;"><img src="${badgeUrl}" alt="Mind the Gap - ${currentStatConfig.title}" title="${titleText}" /></a>`;
   };
 
   const copyToClipboard = async () => {
@@ -402,7 +402,7 @@ export default function BadgeSelector() {
                   <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
                     <li>Click to select the badge image in your signature</li>
                     <li>Click the <strong>Link icon</strong> in the toolbar</li>
-                    <li>Paste the dashboard URL from the embed code</li>
+                    <li>Paste the homepage URL from the embed code</li>
                     <li>Click <strong>OK</strong>, then <strong>Save Changes</strong> at the bottom</li>
                   </ul>
                 </div>
@@ -437,7 +437,7 @@ export default function BadgeSelector() {
                     <li>Go to <strong>Mail then Compose and reply then Email signature</strong></li>
                     <li>Click <strong>Insert pictures inline</strong> button in signature editor</li>
                     <li>Upload your saved PNG badge file</li>
-                    <li>Select the image, click the <strong>Link icon</strong>, and paste the dashboard URL from the embed code</li>
+                    <li>Select the image, click the <strong>Link icon</strong>, and paste the homepage URL from the embed code</li>
                     <li>Click <strong>Save</strong></li>
                   </ul>
                 </div>
@@ -449,7 +449,7 @@ export default function BadgeSelector() {
                     <li>Select your signature or create a new one</li>
                     <li>Click the <strong>Insert Picture icon</strong> in the signature editor</li>
                     <li>Browse and select your saved PNG badge file</li>
-                    <li>Highlight the image, click the <strong>Link button</strong>, paste dashboard URL from embed code</li>
+                    <li>Highlight the image, click the <strong>Link button</strong>, paste homepage URL from embed code</li>
                     <li>Click <strong>OK</strong> to save</li>
                   </ul>
                 </div>
@@ -530,7 +530,7 @@ export default function BadgeSelector() {
                   <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
                     <li>The embed code includes descriptive alt text for screen readers</li>
                     <li>The badge automatically updates with fresh data every 24 hours</li>
-                    <li>Clicking the badge takes visitors to the full dashboard with all statistics</li>
+                    <li>Clicking the badge takes visitors to Mind the Gap homepage</li>
                   </ul>
                 </div>
 
