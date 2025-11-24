@@ -34,7 +34,7 @@ const validStats = ['paygap', 'leadership', 'maternal', 'healthcare', 'workforce
 
 // Stat-specific colors
 const statColors: Record<string, string> = {
-  paygap: '#f9f871',
+  paygap: '#6e6cbf',
   leadership: '#b573c3',
   maternal: '#fa7aab',
   healthcare: '#ffc569',

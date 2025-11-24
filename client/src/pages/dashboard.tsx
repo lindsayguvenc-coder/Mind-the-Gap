@@ -38,8 +38,8 @@ const statConfigs: Record<StatType, StatConfig> = {
   paygap: {
     title: 'Gender Pay Gap',
     icon: TrendingDown,
-    color: '#f9f871',
-    lightColor: '#fefdf0',
+    color: '#6e6cbf',
+    lightColor: '#ececf7',
   },
   leadership: {
     title: 'Leadership Representation',

@@ -13,7 +13,7 @@
 ## Color Palette
 
 **Brand Colors:**
-- Yellow: #f9f871 - Gender pay gap, attention, highlight
+- Purple-Blue: #6e6cbf - Gender pay gap, professional, trust
 - Purple: #b573c3 - Leadership, authority
 - Pink: #fa7aab - Maternal health, care
 - Orange: #ffc569 - Healthcare, wellness
@@ -21,7 +21,7 @@
 
 **Statistic-Specific Colors:**
 Each statistic has its own unique color for visual differentiation:
-- Gender Pay Gap: #f9f871 (Yellow) - Attention, urgency, highlight
+- Gender Pay Gap: #6e6cbf (Purple-Blue) - Professional, trustworthy, credible
 - Leadership Representation: #b573c3 (Purple) - Power, leadership
 - Maternal Mortality Rate: #fa7aab (Pink) - Maternal care, compassion
 - Contraceptive Access: #ffc569 (Orange) - Health, wellness
