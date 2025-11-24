@@ -346,8 +346,12 @@ export default function Dashboard() {
         <header className="mb-12 border-b pb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>
-              <h1 className="text-4xl font-bold mb-2" data-testid="text-dashboard-title">Mind the Gap</h1>
-              <p className="text-lg text-muted-foreground italic" data-testid="text-tagline">Mind it. Measure it. Move it.</p>
+              <h1 className="text-4xl font-bold mb-2 tracking-wide" data-testid="text-dashboard-title">
+                Mind the <span style={{ color: '#ffc569' }}>Gap</span>
+              </h1>
+              <p className="text-lg text-muted-foreground italic font-light tracking-wide" data-testid="text-tagline">
+                Mind it. Measure it. Move it.
+              </p>
               <p className="text-lg text-muted-foreground">
                 Global & Local Women's Rights Statistics
               </p>

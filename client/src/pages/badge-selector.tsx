@@ -143,8 +143,12 @@ export default function BadgeSelector() {
     <div className="min-h-screen bg-background">
       <div className="max-w-2xl mx-auto px-6 py-8 lg:px-8 lg:py-12">
         <header className="text-center mb-12">
-          <h1 className="text-6xl font-bold mb-2" data-testid="text-badge-selector-title">Mind the Gap</h1>
-          <p className="text-lg text-muted-foreground italic mb-4" data-testid="text-tagline">Mind it. Measure it. Move it.</p>
+          <h1 className="text-6xl font-bold mb-2 tracking-wide" data-testid="text-badge-selector-title">
+            Mind the <span style={{ color: '#ffc569' }}>Gap</span>
+          </h1>
+          <p className="text-lg text-muted-foreground italic font-light tracking-wide mb-4" data-testid="text-tagline">
+            Mind it. Measure it. Move it.
+          </p>
           <p className="text-xl text-muted-foreground">Create your email signature badge</p>
           {localStats?.lastUpdated && (
             <p className="text-sm text-muted-foreground mt-2" data-testid="text-last-updated">

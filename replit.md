@@ -207,3 +207,26 @@ Preferred communication style: Simple, everyday language.
 - **Embed Code Enhancement**: Title attribute added with detailed source information: "{Statistic}: Global vs {Location} - Data from World Bank API, updates daily. Click to view Mind the Gap dashboard."
 - **Link Behavior**: All embedded badges link to dashboard (`/dashboard`) for full statistics and context
 - **Hover Information**: Title attribute provides source details on hover, enhancing transparency and credibility
+
+### Brand Identity & Typography
+- **Design Philosophy**: Minimal and elegant approach focused on typography and spacing over visual embellishment
+- **Site Name Styling**:
+  - "Mind the Gap" displays with increased letter spacing (`tracking-wide`) for sophistication
+  - "Gap" highlighted in orange accent color (#ffc569) to create focal point and reinforce brand color
+  - Consistent across all touchpoints: Dashboard, Badge Selector, email badges (SVG/PNG), social media share cards
+- **Tagline Typography**:
+  - "Mind it. Measure it. Move it." rendered in italic with lighter font weight (300) and generous letter spacing
+  - Subtle opacity (75%) creates visual hierarchy without competing with primary content
+  - Maintains elegant, refined appearance across all contexts
+- **Implementation Details**:
+  - Frontend: React components use inline styles for orange accent on "Gap" with CSS classes for letter spacing
+  - SVG Assets: Uses `<tspan>` elements for color accent and SVG `letter-spacing` attribute for refined typography
+  - All brand elements maintain consistent visual treatment whether displayed on web pages or in generated graphics
+
+### Portfolio Attribution
+- **Location**: Bottom of Dashboard and Badge Selector pages
+- **Format**: Two-line text display
+  - Line 1: "Learn more about the creator" (muted foreground color)
+  - Line 2: "View Portfolio →" (primary color link with hover underline)
+- **URL**: https://manif3stportfolio.com/
+- **Link Behavior**: Opens in new tab with security attributes (target="_blank", rel="noopener noreferrer")
