@@ -585,7 +585,7 @@ export default function BadgeSelector() {
         </Card>
 
 
-        </div>
+      
       </div>
     </div>
   );
