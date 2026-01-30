@@ -584,22 +584,7 @@ export default function BadgeSelector() {
           </p>
         </Card>
 
-        <div className="mt-8 text-center pb-8">
-          <p className="text-sm text-muted-foreground mb-4">
-            Statistics update automatically every 24 hours with fresh data from official sources.
-          </p>
-          <p className="text-sm text-muted-foreground mb-2">
-            Learn more about the creator
-          </p>
-          <a 
-            href="https://manif3stportfolio.com/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-primary hover:underline inline-flex items-center gap-1"
-            data-testid="link-portfolio"
-          >
-            View Portfolio →
-          </a>
+
         </div>
       </div>
     </div>
