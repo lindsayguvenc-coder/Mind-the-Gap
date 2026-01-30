@@ -147,20 +147,7 @@ export default function DataSources() {
           </div>
         </Card>
 
-        <Card className="p-8">
-          <h2 className="text-2xl font-bold mb-4">Questions?</h2>
-          <p className="text-muted-foreground mb-4">
-            If you have questions about our data sources or methodology, feel free to reach out.
-          </p>
-          <a 
-            href="https://manif3stportfolio.com/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            Contact the creator →
-          </a>
-        </Card>
+
       </div>
     </div>
   );
