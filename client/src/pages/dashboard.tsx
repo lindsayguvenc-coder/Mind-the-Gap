@@ -457,9 +457,12 @@ export default function Dashboard() {
                 Mind the Gap is a real-time statistics tracker highlighting ongoing disparities in women's rights, 
                 economic equality, and healthcare access worldwide. Data automatically refreshes every 24 hours.
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground mb-4">
                 Data sourced from World Bank, WHO, ILO, and UN agencies. Statistics represent the most recent available data.
               </p>
+              <Link href="/data-sources">
+                <Button variant="outline">View Detailed Data Sources →</Button>
+              </Link>
             </Card>
 
             <Card className="mt-8 p-8 bg-muted/30">
