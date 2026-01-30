@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Dashboard from "@/pages/dashboard";
 import BadgeSelector from "@/pages/badge-selector";
 import NotFound from "@/pages/not-found";
+import DataSources from "@/pages/data-sources";  
 
 function Router() {
   return (
@@ -14,6 +15,7 @@ function Router() {
       <Route path="/badge" component={BadgeSelector} />
       <Route path="/badges" component={BadgeSelector} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/data-sources" component={DataSources} />  {/* ADD THIS LINE */}
       <Route component={NotFound} />
     </Switch>
   );
