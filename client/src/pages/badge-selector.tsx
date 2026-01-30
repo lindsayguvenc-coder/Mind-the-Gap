@@ -284,7 +284,7 @@ export default function BadgeSelector() {
                     {currentStatConfig.title}
                   </div>
                   <div className="text-white/60 text-xs">
-                    Source: World Bank
+                    Source: {globalData.source || 'Various'}
                   </div>
                 </div>
               </div>
