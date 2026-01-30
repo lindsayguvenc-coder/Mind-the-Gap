@@ -645,7 +645,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           <!-- Statistic title and source in colored area -->
           <text x="20" y="104" font-family="Inter, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.9)">${escapeSvgText(statTitle)}</text>
-          <text x="20" y="115" font-family="Inter, sans-serif" font-size="7" font-weight="400" fill="rgba(255,255,255,0.6)">Source: World Bank</text>
+          <text x="20" y="115" font-family="Inter, sans-serif" font-size="7" font-weight="400" fill="rgba(255,255,255,0.6)">Source: ${escapeSvgText(data1.source || 'Various')}</text>
           
           <!-- Tagline in white space with bold white text -->
           <text x="250" y="140" font-family="Inter, sans-serif" font-size="10" font-weight="700" font-style="italic" text-anchor="middle" letter-spacing="0.03em" fill="white">
@@ -780,7 +780,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           <!-- Statistic title and source in colored area -->
           <text x="20" y="104" font-family="Inter, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.9)">${escapeSvgText(statTitle)}</text>
-          <text x="20" y="115" font-family="Inter, sans-serif" font-size="7" font-weight="400" fill="rgba(255,255,255,0.6)">Source: World Bank</text>
+          <text x="20" y="115" font-family="Inter, sans-serif" font-size="7" font-weight="400" fill="rgba(255,255,255,0.6)">Source: ${escapeSvgText(data1.source || 'Various')}</text>
           
           <!-- Tagline in white space with bold white text -->
           <text x="250" y="140" font-family="Inter, sans-serif" font-size="10" font-weight="700" font-style="italic" text-anchor="middle" letter-spacing="0.03em" fill="white">
